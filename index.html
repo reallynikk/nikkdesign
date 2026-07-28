@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Никита Иванов — Графический Дизайнер | Портфолио</title>
+  <meta name="description"
+    content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+  <meta name="keywords"
+    content="дизайнер, портфолио, графический дизайн, мерч, кураторы игэу, брендинг, айдентика, telegram">
+
+  <!-- Open Graph & Social Media Sharing Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Никита Иванов — Графический Дизайнер | Портфолио">
+  <meta property="og:description" content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+  <meta property="og:image" content="images/AboutMe/photo.jpg">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="theme-color" content="#07090e">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Никита Иванов — Графический Дизайнер | Портфолио">
+  <meta name="twitter:description" content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+  <meta name="twitter:image" content="images/AboutMe/photo.jpg">
+
+  <!-- Font Pairing: Dela Gothic One & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- Ambient Liquid Canvas Backdrop -->
+  <canvas id="auraCanvas" class="aura-canvas"></canvas>
+
+  <!-- Custom Contextual Magnetic Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing">
+    <span class="cursor-text" id="cursorText"></span>
+  </div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#" class="header__logo" data-cursor="ГЛАВНАЯ">
+        <span class="logo-serif">Никита</span><span class="logo-dot">•</span><span class="logo-sub">ДИЗАЙН</span>
+      </a>
+
+      <nav class="header__nav" id="nav">
+        <a href="#about" class="nav__link" data-cursor="О СЕБЕ">О себе</a>
+        <a href="#projects" class="nav__link" data-cursor="РАБОТЫ">Проекты</a>
+        <a href="#skills" class="nav__link" data-cursor="СТЕК">Инструменты</a>
+        <a href="#connect" class="nav__link nav__link--highlight" data-cursor="ТЕЛЕГРАМ">Telegram</a>
+      </nav>
+
+      <div class="header__actions">
+        <!-- Direct Telegram Quick Link with Pulse -->
+        <a href="https://t.me/reallynikk" target="_blank" rel="noopener"
+          class="header__tg-btn btn-unusual btn-telegram-pulse" data-cursor="ЧАТ">
+          <span class="tg-status-dot"></span>
+          <span class="btn-label">Telegram</span>
+          <svg class="icon-tg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.75 3.98-1.73 6.64-2.87 7.97-3.44 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+          </svg>
+        </a>
+
+        <button class="header__burger" id="burger" aria-label="Открыть меню">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section with Editorial Typography & Interactive Works Reel Showcase -->
+    <section class="hero" id="hero">
+      <div class="container hero__container">
+        <div class="hero__grid">
+          <!-- Left Column: Title & Intro -->
+          <div class="hero__intro">
+            <div class="hero__status-pill reveal">
+              <span class="pulse-dot"></span>
+              <span>Открыт к новым проектам & фрилансу</span>
+            </div>
+
+            <!-- Kinetic Title (Serif + Sans Pairing) -->
+            <h1 class="hero__kinetic-title" id="kineticTitle">
+              <span class="title-line title-line--1">
+                <span class="font-serif-italic char-hover">Графический</span>
+              </span>
+              <span class="title-line title-line--2">
+                <span class="font-sans-bold char-hover highlight-color">ДИЗАЙНЕР</span>
+                <span class="hero__asterisk">✦</span>
+              </span>
+            </h1>
+
+            <p class="hero__description reveal">
+              Создаю выразительную визуальную идентичность, фирменный мерч, упаковку и эстетичный digital-дизайн.
+              Превращаю идеи в лаконичные визуальные решения.
+            </p>
+
+            <!-- Dynamic Category Pills -->
+            <div class="hero__tags reveal">
+              <span class="hero-tag">Мерч & Брендинг</span>
+              <span class="hero-tag">Айдентика</span>
+              <span class="hero-tag">Упаковка</span>
+              <span class="hero-tag">3D & Моушн</span>
+              <span class="hero-tag">Постеры</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="hero__buttons reveal">
+              <a href="#projects" class="btn-unusual btn-magnetic btn-liquid" data-cursor="ОТКРЫТЬ">
+                <span class="btn-text">Смотреть работы</span>
+                <div class="btn-liquid-bg"></div>
+                <div class="btn-icon-circle">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </div>
+              </a>
+
+              <a href="https://t.me/reallynikk" target="_blank" rel="noopener" class="btn-unusual btn-neon-border"
+                data-cursor="ТЕЛЕГРАМ">
+                <span class="border-glow"></span>
+                <span class="btn-content">
+                  <svg class="tg-svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.75 3.98-1.73 6.64-2.87 7.97-3.44 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+                  </svg>
+                  <span>Связаться в Telegram</span>
+                </span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Spatial 3D Coverflow Showcase Stage -->
+          <div class="hero__showcase-wrap reveal">
+            <div class="hero-showcase-aura" id="showcaseAura"></div>
+            
+            <div class="coverflow-stage" id="coverflowStage">
+              <div class="coverflow-track" id="coverflowTrack">
+                <!-- Dynamically rendered from PROJECTS_DATA in JS -->
+              </div>
+
+              <!-- Coverflow Controls: Arrows + Dots -->
+              <div class="coverflow-controls">
+                <button class="coverflow-arrow coverflow-arrow--prev" id="coverflowPrev" aria-label="Предыдущий проект">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <div class="coverflow-dots" id="coverflowDots"></div>
+                <button class="coverflow-arrow coverflow-arrow--next" id="coverflowNext" aria-label="Следующий проект">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.hero__grid -->
+      </div><!-- /.container -->
+
+      <!-- Scroll Down Indicator -->
+      <div class="hero__scroll-indicator">
+        <div class="mouse-icon">
+          <div class="wheel"></div>
+        </div>
+        <span>скролл вниз</span>
+      </div>
+    </section>
+
+    <!-- Infinite Kinetic Marquee Ticker in Russian -->
+    <div class="marquee-section">
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+        </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section with Editorial Font Pairing & Personal Portrait -->
+    <section class="about section" id="about">
+      <div class="container">
+        <div class="about__layout">
+          <!-- Left Column: Portrait & Quick Stats Card -->
+          <div class="about__visual-column reveal">
+            <div class="about__portrait-card glass-card">
+              <div class="portrait-glow"></div>
+              <img src="images/AboutMe/photo.jpg" alt="Никита Иванов — Графический Дизайнер" class="portrait-img">
+            </div>
+
+            <!-- Stats Card -->
+            <div class="about__stats-card glass-card">
+              <div class="stat-item">
+                <div class="stat-num"><span class="counter" data-target="2">0</span><span class="stat-plus">+</span>
+                </div>
+                <div class="stat-desc">Года опыта в дизайне</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-num"><span class="counter" data-target="5">0</span><span class="stat-plus">+</span>
+                </div>
+                <div class="stat-desc">Больших проектов</div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item">
+                <div class="stat-num"><span class="counter" data-target="100">0</span><span class="stat-plus">%</span>
+                </div>
+                <div class="stat-desc">Внимания к деталям</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Philosophy & Intro Text -->
+          <div class="about__content">
+            <div class="section-tag reveal">✦ ФИЛОСОФИЯ ДИЗАЙНА</div>
+            <h2 class="section-title reveal">
+              Дизайн — это искусство <br>
+              <span class="font-serif-italic highlight-color">находить смыслы</span> в деталях
+            </h2>
+            <p class="about__text reveal">
+              Привет! Я Никита — графический дизайнер с фокусом на изысканную визуальную подачу, фирменный мерч,
+              утонченную типографику и запоминающуюся айдентику.
+            </p>
+            <p class="about__text reveal">
+              Верю, что эстетика и функциональность не исключают друг друга. Разрабатываю проекты от первых
+              концептуальных скетчей до готовности макетов в печать.
+            </p>
+
+            <!-- Interactive Telegram Link & Email Contact Chips in About Me -->
+            <div class="about__contacts-row reveal">
+              <div class="about__contact-card glass-card" id="aboutTgCard" data-cursor="КОПИРОВАТЬ">
+                <div class="about-card-icon about-card-icon--tg">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.75 3.98-1.73 6.64-2.87 7.97-3.44 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+                  </svg>
+                </div>
+                <div class="about-card-info">
+                  <span class="about-card-label">Telegram</span>
+                  <span class="about-card-val" id="aboutTgVal">@reallynikk</span>
+                </div>
+                <div class="about-card-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </div>
+              </div>
+
+              <div class="about__contact-card glass-card" id="aboutEmailCard" data-cursor="КОПИРОВАТЬ">
+                <div class="about-card-icon about-card-icon--email">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </div>
+                <div class="about-card-info">
+                  <span class="about-card-label">Рабочая почта</span>
+                  <span class="about-card-val" id="aboutEmailVal">nikkdesign@yandex.ru</span>
+                </div>
+                <div class="about-card-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selected Projects Section -->
+    <section class="projects section" id="projects">
+      <div class="container">
+        <div class="projects__header">
+          <div>
+            <div class="section-tag reveal">✦ ПОРТФОЛИО</div>
+            <h2 class="section-title reveal">Избранные <span class="font-serif-italic highlight-color">проекты</span>
+            </h2>
+          </div>
+          <p class="projects__subtitle reveal">
+            Нажмите на карточку любого проекта, чтобы открыть полноразмерную презентацию кейса с близким просмотром.
+          </p>
+        </div>
+
+        <!-- Filter Category Tabs -->
+        <div class="projects__filters reveal">
+          <button class="filter-tab active" data-filter="all" data-cursor="ВСЕ">Все работы</button>
+          <button class="filter-tab" data-filter="branding" data-cursor="БРЕНДИНГ">Брендинг & Мерч</button>
+          <button class="filter-tab" data-filter="posters" data-cursor="ПОСТЕРЫ">Постеры</button>
+          <button class="filter-tab" data-filter="packaging" data-cursor="УПАКОВКА">Упаковка</button>
+          <button class="filter-tab" data-filter="digital" data-cursor="DIGITAL">3D & Digital</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects__grid" id="projectsGrid">
+          <!-- Dynamically rendered from PROJECTS_DATA in JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Software & Skills Grid -->
+    <section class="skills section" id="skills">
+      <div class="container">
+        <div class="section-tag reveal">✦ СТЕК И ИНСТРУМЕНТЫ</div>
+        <h2 class="section-title reveal">Инструменты <span class="font-serif-italic highlight-color">творчества</span>
+        </h2>
+
+        <div class="skills__grid">
+          <div class="skill-card glass-card reveal" data-cursor="FIGMA">
+            <div class="skill-card__header">
+              <div class="skill-icon figma-icon">Fg</div>
+              <span class="skill-level">ПРО</span>
+            </div>
+            <h3 class="skill-name">Figma</h3>
+            <p class="skill-desc">Создание UI-компонентов, прототипирование и системный дизайн.</p>
+          </div>
+
+          <div class="skill-card glass-card reveal" data-cursor="PHOTOSHOP">
+            <div class="skill-card__header">
+              <div class="skill-icon ps-icon">Ps</div>
+              <span class="skill-level">ПРО</span>
+            </div>
+            <h3 class="skill-name">Photoshop</h3>
+            <p class="skill-desc">Обработка графики, ретушь, сложный коллажирование и мокапы.</p>
+          </div>
+
+          <div class="skill-card glass-card reveal" data-cursor="ILLUSTRATOR">
+            <div class="skill-card__header">
+              <div class="skill-icon ai-icon">Ai</div>
+              <span class="skill-level">ПРО</span>
+            </div>
+            <h3 class="skill-name">Illustrator</h3>
+            <p class="skill-desc">Векторная графика, построение логотипов, айдентика и знаки.</p>
+          </div>
+
+          <div class="skill-card glass-card reveal" data-cursor="AFTER EFFECTS">
+            <div class="skill-card__header">
+              <div class="skill-icon ae-icon">Ae</div>
+              <span class="skill-level">ПРОФИ</span>
+            </div>
+            <h3 class="skill-name">After Effects</h3>
+            <p class="skill-desc">Анимация типографики, шейповый моушн-дизайн и лоадеры.</p>
+          </div>
+
+          <div class="skill-card glass-card reveal" data-cursor="BLENDER">
+            <div class="skill-card__header">
+              <div class="skill-icon bl-icon">Bl</div>
+              <span class="skill-level">3D</span>
+            </div>
+            <h3 class="skill-name">Blender 3D</h3>
+            <p class="skill-desc">Моделирование объектов, текстурирование, абстрактный 3D-арт.</p>
+          </div>
+
+          <div class="skill-card glass-card reveal" data-cursor="INDESIGN">
+            <div class="skill-card__header">
+              <div class="skill-icon id-icon">Id</div>
+              <span class="skill-level">ПРО</span>
+            </div>
+            <h3 class="skill-name">InDesign</h3>
+            <p class="skill-desc">Многостраничные издания, брендбуки, каталоги и типографика.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direct Telegram Connect CTA Section -->
+    <section class="connect section" id="connect">
+      <div class="container">
+        <div class="connect__card glass-card reveal">
+          <div class="connect__glow-bg"></div>
+
+          <div class="connect__content">
+            <div class="connect__badge">
+              <span class="pulse-dot green"></span>
+              <span>Быстрый ответ в Telegram</span>
+            </div>
+
+            <h2 class="connect__title">
+              Готовы обсудить <br>
+              <span class="font-serif-italic highlight-color">ваш проект?</span>
+            </h2>
+
+            <p class="connect__subtitle">
+              Вся коммуникация происходит напрямую через Telegram. Напишите мне, опишите задачу или пришлите референсы —
+              я на связи!
+            </p>
+
+            <div class="connect__handle-box">
+              <div class="handle-info">
+                <span class="handle-label">Имя пользователя Telegram</span>
+                <span class="handle-val" id="tgHandleText">@reallynikk</span>
+              </div>
+              <button class="btn-copy-handle" id="copyTgBtn" data-cursor="КОПИРОВАТЬ">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Скопировать</span>
+              </button>
+            </div>
+
+            <div class="connect__handle-box">
+              <div class="handle-info">
+                <span class="handle-label">Рабочая почта (Email)</span>
+                <span class="handle-val" id="emailHandleText">nikkdesign@yandex.ru</span>
+              </div>
+              <button class="btn-copy-handle" id="copyEmailBtn" data-cursor="КОПИРОВАТЬ">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Скопировать</span>
+              </button>
+            </div>
+
+            <div class="connect__actions">
+              <a href="https://t.me/reallynikk" target="_blank" rel="noopener" class="btn-unusual btn-telegram-giant"
+                data-cursor="ОТКРЫТЬ TG">
+                <div class="btn-tg-inner">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.75 3.98-1.73 6.64-2.87 7.97-3.44 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+                  </svg>
+                  <span>Открыть чат в Telegram</span>
+                </div>
+                <div class="btn-arrow-wrap">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
+
+              <button class="btn-unusual btn-qr-toggle" id="openQrBtn" data-cursor="QR-КОД">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span>Показать QR-код</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="#" class="footer__logo">
+        <span class="logo-serif">Никита</span><span class="logo-dot">•</span><span class="logo-sub">ДИЗАЙН</span>
+      </a>
+      <p class="footer__copy">© 2026 Никита Иванов. Все права защищены.</p>
+
+      <div class="footer__socials">
+        <a href="https://t.me/reallynikk" target="_blank" rel="noopener" class="social-link" data-cursor="ТЕЛЕГРАМ">
+          <span>Telegram</span>
+        </a>
+        <a href="mailto:nikkdesign@yandex.ru" class="social-link" data-cursor="ПОЧТА">
+          <span>nikkdesign@yandex.ru</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Magnetic Back to Top Button -->
+  <button class="back-to-top" id="backToTop" aria-label="Наверх" data-cursor="НАВЕРХ">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="18 15 12 9 6 15" />
+    </svg>
+  </button>
+
+  <!-- FULL-SCREEN EDITORIAL CASE STUDY PAGE -->
+  <div class="case-study-page" id="caseStudyPage" aria-hidden="true">
+    <!-- Animated Playful Doodle Background Overlay -->
+    <div class="case-study-doodle-bg" id="caseDoodleBg"></div>
+    <!-- Sticky Top Navigation Bar -->
+    <div class="case-study-nav">
+      <button class="case-study-back" id="caseBackBtn" data-cursor="НАЗАД">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        <span>Назад к портфолио</span>
+      </button>
+
+      <div class="case-study-nav-title" id="caseNavTitle">Мерч «Кураторы ИГЭУ» 2026</div>
+
+      <a href="https://t.me/reallynikk" target="_blank" rel="noopener" class="case-study-nav-tg btn-telegram-pulse"
+        data-cursor="ТЕЛЕГРАМ">
+        <span class="tg-status-dot"></span>
+        <span>Обсудить в Telegram</span>
+      </a>
+    </div>
+
+    <!-- Case Study Body -->
+    <div class="case-study-container">
+      <div class="case-study-header">
+        <span class="case-tag" id="caseCategory">Брендинг & Мерч</span>
+        <h1 class="case-title font-serif-italic" id="caseTitle">Мерч «Кураторы ИГЭУ» 2026</h1>
+        <p class="case-subtitle" id="caseSubtitle">Фирменная атрибутика и линейка мерча для студенческого объединения
+          выпуска 2026</p>
+      </div>
+
+      <!-- Hero Visual Banner -->
+      <div class="case-hero-banner zoomable-img-wrap" id="caseHeroVisual" data-cursor="ЗУМ">
+        <!-- Main visual injected dynamically -->
+      </div>
+
+      <!-- Project Key Facts Grid -->
+      <div class="case-facts-grid">
+        <div class="fact-card glass-card">
+          <span class="fact-label">Задача</span>
+          <p class="fact-value" id="caseTask">Описание задачи...</p>
+        </div>
+        <div class="fact-card glass-card">
+          <span class="fact-label">Материалы & Результаты</span>
+          <ul class="fact-list" id="caseDeliverables">
+            <!-- Deliverables -->
+          </ul>
+        </div>
+        <div class="fact-card glass-card">
+          <span class="fact-label">Инструменты</span>
+          <div class="fact-tags" id="caseTools">
+            <!-- Tools -->
+          </div>
+        </div>
+      </div>
+      <!-- Categorized Photo Albums Section -->
+      <div class="case-albums-section" id="caseAlbumsSection">
+        <!-- Photo albums injected dynamically by JS -->
+      </div>
+
+      <!-- Case Footer Telegram CTA -->
+      <div class="case-footer-cta glass-card">
+        <div class="cta-text">
+          <h3>Понравилась работа?</h3>
+          <p>Давайте создадим уникальный мерч или айдентику для вашего бренда!</p>
+        </div>
+        <a href="https://t.me/reallynikk" target="_blank" rel="noopener" class="btn-unusual btn-telegram-giant"
+          data-cursor="ТЕЛЕГРАМ">
+          <div class="btn-tg-inner">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.03-1.99 1.27-5.62 3.72-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.88.03-.24.37-.49 1.02-.75 3.98-1.73 6.64-2.87 7.97-3.44 3.79-1.58 4.58-1.86 5.09-1.87.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" />
+            </svg>
+            <span>Написать в Telegram</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIGH-RES FULLSCREEN IMAGE LIGHTBOX ZOOM MODAL -->
+  <div class="lightbox-overlay" id="imageLightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxCloseBtn" data-cursor="ЗАКРЫТЬ">✕</button>
+    <div class="lightbox-content">
+      <img src="" alt="Увеличенное изображение" id="lightboxImg">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal Popover -->
+  <div class="qr-modal-overlay" id="qrModal" aria-hidden="true" data-cursor="ЗАКРЫТЬ">
+    <div class="qr-modal-card glass-card">
+      <button class="modal-close" id="qrCloseBtn" data-cursor="ЗАКРЫТЬ" aria-label="Закрыть">✕</button>
+      <h3 class="font-serif-italic">Telegram QR-код</h3>
+      <p>Отсканируйте камерой смартфона, чтобы моментально открыть чат</p>
+      <div class="qr-code-box">
+        <img src="images/AboutMe/TelegramQR.svg" alt="Telegram QR-код @reallynikk" class="qr-code-img">
+      </div>
+      <div class="qr-username">@reallynikk</div>
+      <div class="qr-close-hint">Нажмите в любом месте, чтобы закрыть ✕</div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modular Projects Data -->
+  <script type="module" src="js/projects/index.js"></script>
+  <!-- Main JavaScript File -->
+  <script src="js/main.js"></script>
+</body>
+
+</html>
