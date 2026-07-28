@@ -1,0 +1,4 @@
+*.ai
+*.psd
+.wrangler/
+node_modules/
