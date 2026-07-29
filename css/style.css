@@ -6,10 +6,10 @@
 
 :root {
   /* Color Palette */
-  --bg-primary: #07090e;
-  --bg-secondary: #0d1017;
-  --bg-card: rgba(16, 20, 30, 0.7);
-  --bg-card-hover: rgba(22, 28, 42, 0.9);
+  --bg-primary: #030406;
+  --bg-secondary: #06080d;
+  --bg-card: rgba(10, 14, 22, 0.85);
+  --bg-card-hover: rgba(16, 22, 34, 0.95);
 
   --text-main: #f4f7fb;
   --text-muted: #9aa3b4;
@@ -163,7 +163,7 @@ ul {
 }
 
 /* --------------------------------------------------------------------------
-   Canvas Background Aura & Animated Gradient Backdrop
+   Canvas Background Aura & Animated Gradient Backdrop (Deep & Dark Subtle Flow)
    -------------------------------------------------------------------------- */
 body::before {
   content: '';
@@ -174,23 +174,26 @@ body::before {
   height: 200%;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 22% 25%, rgba(69, 200, 245, 0.2) 0%, transparent 45%),
-              radial-gradient(circle at 78% 30%, rgba(37, 99, 235, 0.16) 0%, transparent 50%),
-              radial-gradient(circle at 45% 85%, rgba(139, 92, 246, 0.14) 0%, transparent 45%),
-              radial-gradient(circle at 70% 70%, rgba(69, 200, 245, 0.12) 0%, transparent 40%);
-  animation: bgGradientFlow 20s ease-in-out infinite alternate;
-  opacity: 0.85;
+  background: radial-gradient(circle at 20% 25%, rgba(69, 200, 245, 0.09) 0%, transparent 45%),
+              radial-gradient(circle at 80% 30%, rgba(37, 99, 235, 0.07) 0%, transparent 50%),
+              radial-gradient(circle at 45% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%),
+              radial-gradient(circle at 75% 70%, rgba(69, 200, 245, 0.05) 0%, transparent 40%);
+  animation: bgGradientFlow 14s ease-in-out infinite alternate;
+  opacity: 0.55;
 }
 
 @keyframes bgGradientFlow {
   0% {
     transform: translate(0, 0) rotate(0deg) scale(1);
   }
-  50% {
-    transform: translate(-3%, 4%) rotate(2.5deg) scale(1.04);
+  33% {
+    transform: translate(-4%, 5%) rotate(3deg) scale(1.05);
+  }
+  66% {
+    transform: translate(5%, -4%) rotate(-3deg) scale(0.96);
   }
   100% {
-    transform: translate(3%, -3%) rotate(-2deg) scale(0.98);
+    transform: translate(-2%, -5%) rotate(2deg) scale(1.03);
   }
 }
 
@@ -202,7 +205,7 @@ body::before {
   height: 100vh;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.65;
+  opacity: 0.35;
 }
 
 
@@ -260,27 +263,18 @@ body::before {
   }
 
   .cursor-text {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #ffffff;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    text-transform: uppercase;
-    white-space: nowrap;
+    display: none !important;
   }
 
   .cursor-ring.active {
-    width: 72px;
-    height: 72px;
+    width: 52px;
+    height: 52px;
     border-color: var(--accent-primary);
     background-color: rgba(69, 200, 245, 0.12);
   }
 
   .cursor-ring.active .cursor-text {
-    opacity: 1;
-    transform: scale(1);
+    display: none !important;
   }
 }
 
@@ -316,7 +310,20 @@ body::before {
   letter-spacing: 1px;
   display: flex;
   align-items: center;
-  gap: 4px;
+}
+
+.header__logo-img {
+  height: 48px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.header__logo:hover .header__logo-img {
+  transform: scale(1.04);
+  filter: drop-shadow(0 0 14px rgba(69, 200, 245, 0.35));
 }
 
 .logo-serif {
@@ -2584,11 +2591,22 @@ html, body {
   }
 
   .hero__kinetic-title {
-    font-size: clamp(1.8rem, 7.5vw, 3rem) !important;
-    line-height: 1.15 !important;
-    margin-bottom: 16px !important;
-    word-break: break-word !important;
+    font-size: clamp(2.4rem, 10vw, 3.6rem) !important;
+    line-height: 1.08 !important;
+    margin-bottom: 20px !important;
+    word-break: normal !important;
     overflow-wrap: break-word !important;
+  }
+
+  .hero__kinetic-title .font-serif-italic {
+    font-size: 1.25em !important;
+    line-height: 1.08 !important;
+    display: block !important;
+  }
+
+  .hero__kinetic-title .font-sans-bold {
+    font-size: 1.05em !important;
+    letter-spacing: 0.5px !important;
   }
 
   .hero__kinetic-title .char-hover {
@@ -2869,7 +2887,16 @@ html, body {
   }
 
   .hero__kinetic-title {
-    font-size: 1.7rem !important;
+    font-size: clamp(2.2rem, 9.2vw, 3.2rem) !important;
+    line-height: 1.08 !important;
+  }
+
+  .hero__kinetic-title .font-serif-italic {
+    font-size: 1.22em !important;
+  }
+
+  .header__logo-img {
+    height: 38px !important;
   }
 
   .section-title {

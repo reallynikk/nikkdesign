@@ -50,24 +50,24 @@ function initAuraCanvas() {
   }, { passive: true });
 
   const blobs = [
-    { x: width * 0.2, y: height * 0.3, r: 420, color: 'rgba(69, 200, 245, 0.25)', vx: 0.8, vy: 0.5, phase: 0 },
-    { x: width * 0.8, y: height * 0.7, r: 460, color: 'rgba(37, 99, 235, 0.20)', vx: -0.6, vy: -0.4, phase: 2 },
-    { x: width * 0.5, y: height * 0.5, r: 350, color: 'rgba(139, 92, 246, 0.16)', vx: 0.4, vy: -0.7, phase: 4 }
+    { x: width * 0.25, y: height * 0.3, r: 480, color: 'rgba(69, 200, 245, 0.10)', vx: 1.0, vy: 0.6, phase: 0 },
+    { x: width * 0.75, y: height * 0.7, r: 520, color: 'rgba(37, 99, 235, 0.08)', vx: -0.8, vy: -0.5, phase: 2.1 },
+    { x: width * 0.5, y: height * 0.5, r: 400, color: 'rgba(139, 92, 246, 0.07)', vx: 0.6, vy: -0.9, phase: 4.2 }
   ];
 
   let time = 0;
 
   function render() {
     ctx.clearRect(0, 0, width, height);
-    time += 0.015;
+    time += 0.024;
 
-    mouseX += (targetX - mouseX) * 0.05;
-    mouseY += (targetY - mouseY) * 0.05;
+    mouseX += (targetX - mouseX) * 0.06;
+    mouseY += (targetY - mouseY) * 0.06;
 
     blobs.forEach((blob) => {
-      // Continuous organic floating motion
-      blob.x += blob.vx + Math.sin(time + blob.phase) * 0.4;
-      blob.y += blob.vy + Math.cos(time + blob.phase * 0.7) * 0.4;
+      // Dynamic organic floating motion
+      blob.x += blob.vx + Math.sin(time + blob.phase) * 0.75;
+      blob.y += blob.vy + Math.cos(time * 0.9 + blob.phase * 0.7) * 0.75;
 
       if (blob.x - blob.r < -100 || blob.x + blob.r > width + 100) blob.vx *= -1;
       if (blob.y - blob.r < -100 || blob.y + blob.r > height + 100) blob.vy *= -1;
@@ -131,8 +131,7 @@ function initCustomCursor() {
 
       elem._cEnter = () => {
         ring.classList.add('active');
-        const label = elem.getAttribute('data-cursor');
-        text.textContent = label ? label : '✦';
+        text.textContent = '';
       };
 
       elem._cLeave = () => {
