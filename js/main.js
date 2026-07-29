@@ -27,8 +27,8 @@ function initAuraCanvas() {
   const ctx = canvas.getContext('2d');
 
   let width, height;
-  let mouseX = 0, mouseY = 0;
-  let targetX = 0, targetY = 0;
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let targetX = window.innerWidth / 2, targetY = window.innerHeight / 2;
 
   function resize() {
     width = canvas.width = window.innerWidth;
@@ -42,31 +42,42 @@ function initAuraCanvas() {
     targetY = e.clientY;
   });
 
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      targetX = e.touches[0].clientX;
+      targetY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
   const blobs = [
-    { x: width * 0.2, y: height * 0.3, r: 400, color: 'rgba(69, 200, 245, 0.22)', vx: 0.8, vy: 0.5 },
-    { x: width * 0.8, y: height * 0.7, r: 440, color: 'rgba(37, 99, 235, 0.18)', vx: -0.6, vy: -0.4 },
-    { x: width * 0.5, y: height * 0.5, r: 320, color: 'rgba(139, 92, 246, 0.12)', vx: 0.4, vy: -0.7 }
+    { x: width * 0.2, y: height * 0.3, r: 420, color: 'rgba(69, 200, 245, 0.25)', vx: 0.8, vy: 0.5, phase: 0 },
+    { x: width * 0.8, y: height * 0.7, r: 460, color: 'rgba(37, 99, 235, 0.20)', vx: -0.6, vy: -0.4, phase: 2 },
+    { x: width * 0.5, y: height * 0.5, r: 350, color: 'rgba(139, 92, 246, 0.16)', vx: 0.4, vy: -0.7, phase: 4 }
   ];
+
+  let time = 0;
 
   function render() {
     ctx.clearRect(0, 0, width, height);
+    time += 0.015;
 
     mouseX += (targetX - mouseX) * 0.05;
     mouseY += (targetY - mouseY) * 0.05;
 
     blobs.forEach((blob) => {
-      blob.x += blob.vx;
-      blob.y += blob.vy;
+      // Continuous organic floating motion
+      blob.x += blob.vx + Math.sin(time + blob.phase) * 0.4;
+      blob.y += blob.vy + Math.cos(time + blob.phase * 0.7) * 0.4;
 
-      if (blob.x - blob.r < 0 || blob.x + blob.r > width) blob.vx *= -1;
-      if (blob.y - blob.r < 0 || blob.y + blob.r > height) blob.vy *= -1;
+      if (blob.x - blob.r < -100 || blob.x + blob.r > width + 100) blob.vx *= -1;
+      if (blob.y - blob.r < -100 || blob.y + blob.r > height + 100) blob.vy *= -1;
 
       const dx = mouseX - blob.x;
       const dy = mouseY - blob.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 400) {
-        blob.x += (dx / dist) * 0.5;
-        blob.y += (dy / dist) * 0.5;
+      if (dist < 450) {
+        blob.x += (dx / dist) * 0.6;
+        blob.y += (dy / dist) * 0.6;
       }
 
       const gradient = ctx.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, blob.r);
