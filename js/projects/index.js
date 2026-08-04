@@ -3,10 +3,12 @@
    ========================================================================== */
 import { curators } from './curators.js';
 import { powerq } from './powerq.js';
+import { pervye } from './pervye.js';
 
 export const PROJECTS_DATA = {
   curators,
-  powerq
+  powerq,
+  pervye
 };
 
 // Global attachment for site controllers

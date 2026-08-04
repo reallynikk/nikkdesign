@@ -811,10 +811,10 @@ body::before {
   background: #0d111a;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.35s ease,
-    box-shadow 0.45s ease,
+  transition: transform 0.38s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.38s cubic-bezier(0.25, 1, 0.5, 1),
+    filter 0.3s ease,
+    box-shadow 0.35s ease,
     border-color 0.3s ease;
   will-change: transform, opacity, filter;
   transform-origin: center center;
@@ -825,6 +825,7 @@ body::before {
 .coverflow-card.is-center {
   transform: translateX(0) scale(1) rotateY(0deg) translateZ(0);
   opacity: 1;
+  filter: none;
   z-index: 10;
   border-color: rgba(69, 200, 245, 0.4);
   box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(69, 200, 245, 0.25);
@@ -833,25 +834,38 @@ body::before {
 /* Left Card (Perspective Back) */
 .coverflow-card.is-left {
   transform: translateX(-54%) scale(0.82) rotateY(28deg) translateZ(-120px);
-  opacity: 0.52;
+  opacity: 1;
+  filter: brightness(0.6) contrast(0.95);
   z-index: 5;
 }
 
 .coverflow-card.is-left:hover {
-  opacity: 0.78;
+  opacity: 1;
+  filter: brightness(0.85);
   transform: translateX(-50%) scale(0.85) rotateY(20deg) translateZ(-80px);
 }
 
 /* Right Card (Perspective Back) */
 .coverflow-card.is-right {
   transform: translateX(54%) scale(0.82) rotateY(-28deg) translateZ(-120px);
-  opacity: 0.52;
+  opacity: 1;
+  filter: brightness(0.6) contrast(0.95);
   z-index: 5;
 }
 
 .coverflow-card.is-right:hover {
-  opacity: 0.78;
+  opacity: 1;
+  filter: brightness(0.85);
   transform: translateX(50%) scale(0.85) rotateY(-20deg) translateZ(-80px);
+}
+
+/* Hidden Cards (Beyond 3D Viewport) */
+.coverflow-card.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: scale(0.5) translateZ(-400px);
+  z-index: 1;
 }
 
 .coverflow-img {

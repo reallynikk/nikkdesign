@@ -324,7 +324,7 @@ function initCoverflowShowcase() {
 
   function updateCardPositions() {
     cards.forEach((card, i) => {
-      card.classList.remove('is-center', 'is-left', 'is-right');
+      card.classList.remove('is-center', 'is-left', 'is-right', 'is-hidden');
 
       const total = cards.length;
       const diff = (i - centerIdx + total) % total;
@@ -333,8 +333,10 @@ function initCoverflowShowcase() {
         card.classList.add('is-center');
       } else if (diff === 1) {
         card.classList.add('is-right');
-      } else {
+      } else if (diff === total - 1) {
         card.classList.add('is-left');
+      } else {
+        card.classList.add('is-hidden');
       }
     });
 
@@ -343,10 +345,18 @@ function initCoverflowShowcase() {
     });
   }
 
+  let isAnimating = false;
+  const ANIM_DURATION = 260; // ms transition throttle for fluid rapid flipping
+
   function rotateTo(targetIdx) {
     if (targetIdx === centerIdx) return;
+    if (isAnimating) return;
+    isAnimating = true;
     centerIdx = targetIdx;
     updateCardPositions();
+    setTimeout(() => {
+      isAnimating = false;
+    }, ANIM_DURATION);
   }
 
   function nextCard() {
@@ -397,21 +407,68 @@ function initCoverflowShowcase() {
     });
   });
 
+  // Touch & Mouse Drag Gesture Swipe Support for Smooth Flipping
+  let startX = 0;
+  let isDragging = false;
+
+  if (stage) {
+    stage.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches[0]) {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      }
+    }, { passive: true });
+
+    stage.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (e.changedTouches && e.changedTouches[0]) {
+        const diffX = e.changedTouches[0].clientX - startX;
+        if (diffX < -35) {
+          nextCard();
+          startAutoPlay();
+        } else if (diffX > 35) {
+          prevCard();
+          startAutoPlay();
+        }
+      }
+    }, { passive: true });
+
+    stage.addEventListener('mousedown', (e) => {
+      startX = e.clientX;
+      isDragging = true;
+    });
+
+    stage.addEventListener('mouseup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const diffX = e.clientX - startX;
+      if (diffX < -45) {
+        nextCard();
+        startAutoPlay();
+      } else if (diffX > 45) {
+        prevCard();
+        startAutoPlay();
+      }
+    });
+
+    stage.addEventListener('mouseenter', stopAutoPlay);
+    stage.addEventListener('mouseleave', () => {
+      isDragging = false;
+      startAutoPlay();
+    });
+  }
+
   function startAutoPlay() {
     stopAutoPlay();
     timer = setTimeout(() => {
       nextCard();
       startAutoPlay();
-    }, 2500);
+    }, 2800);
   }
 
   function stopAutoPlay() {
     if (timer) clearTimeout(timer);
-  }
-
-  if (stage) {
-    stage.addEventListener('mouseenter', stopAutoPlay);
-    stage.addEventListener('mouseleave', startAutoPlay);
   }
 
   updateCardPositions();
