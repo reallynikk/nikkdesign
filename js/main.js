@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderProjectsGrid();
   initCoverflowShowcase();
   initScrollEffects();
+  initHeroScrollObserver();
   initCaseStudyController();
   initLightboxZoom();
   initProjectsFilter();
@@ -54,6 +55,12 @@ function initAuraCanvas() {
     { x: width * 0.75, y: height * 0.7, r: 520, color: 'rgba(37, 99, 235, 0.08)', vx: -0.8, vy: -0.5, phase: 2.1 },
     { x: width * 0.5, y: height * 0.5, r: 400, color: 'rgba(139, 92, 246, 0.07)', vx: 0.6, vy: -0.9, phase: 4.2 }
   ];
+
+  window.updateAuraBlobsColor = (r, g, b) => {
+    blobs[0].color = `rgba(${r}, ${g}, ${b}, 0.14)`;
+    blobs[1].color = `rgba(${r}, ${g}, ${b}, 0.09)`;
+    blobs[2].color = `rgba(${r}, ${g}, ${b}, 0.07)`;
+  };
 
   let time = 0;
 
@@ -149,37 +156,10 @@ function initCustomCursor() {
 }
 
 /* --------------------------------------------------------------------------
-   3. Kinetic Typography Effects
+   3. Spatial 3D Typography Distortion (Static 3D Layout)
    -------------------------------------------------------------------------- */
 function initKineticTypography() {
-  const title = document.getElementById('kineticTitle');
-  if (!title) return;
-
-  const charHovers = title.querySelectorAll('.char-hover');
-  charHovers.forEach(container => {
-    const rawText = container.textContent;
-    container.innerHTML = '';
-
-    [...rawText].forEach(char => {
-      const span = document.createElement('span');
-      span.textContent = char;
-      span.classList.add('char-span');
-      span.style.display = 'inline-block';
-      span.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease';
-
-      span.addEventListener('mouseenter', () => {
-        span.style.transform = 'translateY(-12px) scale(1.18) rotate(' + (Math.random() * 8 - 4) + 'deg)';
-        span.style.color = '#45c8f5';
-      });
-
-      span.addEventListener('mouseleave', () => {
-        span.style.transform = 'translateY(0) scale(1) rotate(0deg)';
-        span.style.color = '';
-      });
-
-      container.appendChild(span);
-    });
-  });
+  // Title stays static in 3D spatial layout without hover animations
 }
 
 /* --------------------------------------------------------------------------
@@ -343,10 +323,12 @@ function initCoverflowShowcase() {
     dotEls.forEach((dot, i) => {
       dot.classList.toggle('is-active', i === centerIdx);
     });
+
+    updateDynamicThemeFromCard(cards[centerIdx]);
   }
 
   let isAnimating = false;
-  const ANIM_DURATION = 260; // ms transition throttle for fluid rapid flipping
+  const ANIM_DURATION = 350; // ms transition throttle for fluid rapid flipping
 
   function rotateTo(targetIdx) {
     if (targetIdx === centerIdx) return;
@@ -360,11 +342,13 @@ function initCoverflowShowcase() {
   }
 
   function nextCard() {
+    isAnimating = false;
     const next = (centerIdx + 1) % cards.length;
     rotateTo(next);
   }
 
   function prevCard() {
+    isAnimating = false;
     const prev = (centerIdx - 1 + cards.length) % cards.length;
     rotateTo(prev);
   }
@@ -461,14 +445,13 @@ function initCoverflowShowcase() {
 
   function startAutoPlay() {
     stopAutoPlay();
-    timer = setTimeout(() => {
+    timer = setInterval(() => {
       nextCard();
-      startAutoPlay();
-    }, 2800);
+    }, 4200);
   }
 
   function stopAutoPlay() {
-    if (timer) clearTimeout(timer);
+    if (timer) clearInterval(timer);
   }
 
   updateCardPositions();
@@ -1135,3 +1118,406 @@ function renderCuratorsSideElements(container) {
     </div>
   `;
 }
+
+/* --------------------------------------------------------------------------
+   10. DYNAMIC COVERFLOW THEME ACCENT & HERO AMBIENT BACKGROUND CONTROLLER
+   -------------------------------------------------------------------------- */
+let currentActiveBgHsl = '#030406';
+let currentActiveTextHsl = '#45c8f5';
+let currentActiveRawRgb = { r: 69, g: 200, b: 245 };
+let isHeroSectionVisible = true;
+
+function initHeroScrollObserver() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      isHeroSectionVisible = entry.isIntersecting;
+      if (isHeroSectionVisible) {
+        applyDynamicTheme(currentActiveTextHsl, currentActiveBgHsl, currentActiveRawRgb);
+      } else {
+        revertToDefaultTheme();
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(hero);
+}
+
+function revertToDefaultTheme() {
+  const defaultText = '#45c8f5';
+  const defaultDarkGlow = 'hsl(195, 90%, 28%)';
+  const defaultRgb = { r: 69, g: 200, b: 245 };
+
+  document.documentElement.style.setProperty('--accent-primary', defaultText);
+  document.documentElement.style.setProperty('--dynamic-accent', defaultText);
+
+  // Smoothly update Custom Magnetic Cursor Ring & Dot
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  if (cursorDot) {
+    cursorDot.style.transition = 'background-color 0.8s ease, box-shadow 0.8s ease';
+    cursorDot.style.backgroundColor = defaultText;
+    cursorDot.style.boxShadow = `0 0 10px ${defaultText}`;
+  }
+  if (cursorRing) {
+    cursorRing.style.transition = 'border-color 0.8s ease';
+    cursorRing.style.borderColor = defaultText;
+  }
+
+  if (window.updateAuraBlobsColor) {
+    window.updateAuraBlobsColor(defaultRgb.r, defaultRgb.g, defaultRgb.b);
+  }
+
+  // 1. Reset text color & text-shadow of "ДИЗАЙНЕР" with smooth 0.8s transition
+  const designerSpans = document.querySelectorAll('#kineticTitle .highlight-color, #kineticTitle .highlight-color .char-span, #kineticTitle .font-sans-bold');
+  designerSpans.forEach(el => {
+    el.style.transition = 'color 0.8s ease, text-shadow 0.8s ease';
+    el.style.color = defaultText;
+    el.style.textShadow = `0 4px 16px rgba(0, 0, 0, 0.9), 0 0 25px ${defaultDarkGlow}`;
+  });
+
+  // 2. Reset Asterisk ✦
+  const asterisks = document.querySelectorAll('.hero__asterisk');
+  asterisks.forEach(el => {
+    el.style.transition = 'color 0.8s ease, text-shadow 0.8s ease';
+    el.style.color = defaultText;
+    el.style.textShadow = `0 0 16px ${defaultDarkGlow}`;
+  });
+
+  // 3. Reset hero tags
+  const heroTags = document.querySelectorAll('.hero-tag');
+  heroTags.forEach(tag => {
+    tag.style.transition = 'border-color 0.8s ease';
+    tag.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+  });
+
+  // 4. Reset Action Buttons & Icons
+  const btnMagnetic = document.querySelectorAll('.btn-magnetic');
+  btnMagnetic.forEach(btn => {
+    btn.style.transition = 'background-color 0.8s ease, box-shadow 0.8s ease';
+    btn.style.backgroundColor = defaultText;
+    btn.style.boxShadow = `0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px ${defaultDarkGlow}`;
+  });
+
+  const liquidBgs = document.querySelectorAll('.btn-liquid-bg');
+  liquidBgs.forEach(bg => {
+    bg.style.transition = 'background 0.8s ease';
+    bg.style.background = defaultText;
+  });
+
+  const tgSvgs = document.querySelectorAll('.btn-neon-border .tg-svg, .header__tg-btn .icon-tg');
+  tgSvgs.forEach(svg => {
+    svg.style.transition = 'color 0.8s ease';
+    svg.style.color = defaultText;
+  });
+
+  const telegramPulseBtns = document.querySelectorAll('.btn-telegram-pulse');
+  telegramPulseBtns.forEach(btn => {
+    btn.style.transition = 'border-color 0.8s ease, color 0.8s ease';
+    btn.style.borderColor = defaultText;
+    btn.style.color = defaultText;
+  });
+
+  const tgStatusDots = document.querySelectorAll('.tg-status-dot');
+  tgStatusDots.forEach(dot => {
+    dot.style.transition = 'background-color 0.8s ease, box-shadow 0.8s ease';
+    dot.style.backgroundColor = defaultText;
+    dot.style.boxShadow = `0 0 10px ${defaultText}`;
+  });
+
+  const showcaseAura = document.getElementById('showcaseAura');
+  if (showcaseAura) {
+    showcaseAura.style.transition = 'background 0.8s ease';
+    showcaseAura.style.background = `radial-gradient(circle, ${defaultDarkGlow} 0%, rgba(0, 0, 0, 0) 70%)`;
+  }
+
+  const heroBeam1 = document.getElementById('heroBeam1');
+  if (heroBeam1) {
+    heroBeam1.style.transition = 'background 0.8s ease';
+    heroBeam1.style.background = `linear-gradient(135deg, ${defaultDarkGlow} 0%, transparent 80%)`;
+  }
+
+  const heroBeam2 = document.getElementById('heroBeam2');
+  if (heroBeam2) {
+    heroBeam2.style.transition = 'background 0.8s ease';
+    heroBeam2.style.background = `radial-gradient(ellipse at center, ${defaultDarkGlow} 0%, transparent 75%)`;
+  }
+}
+
+function updateDynamicThemeFromCard(card) {
+  const topTaglineEl = document.getElementById('coverflowTopTagline');
+  if (!card) return;
+
+  const cardType = card.getAttribute('data-type');
+  const projectId = card.getAttribute('data-project-id');
+  const projectsData = getProjectsData();
+
+  if (topTaglineEl) {
+    if (cardType === 'teaser') {
+      topTaglineEl.textContent = '✦ СОЗДАДИМ ВМЕСТЕ';
+    } else if (projectId && projectsData[projectId]) {
+      const p = projectsData[projectId];
+      topTaglineEl.textContent = `✦ ${p.tagline || p.badgeText || p.year}`;
+    }
+  }
+
+  const imgEl = card.querySelector('img');
+  if (cardType === 'teaser' || !imgEl) {
+    const theme = ensureVibrantForDarkBg(69, 200, 245);
+    applyDynamicTheme(theme.textHsl, theme.bgHsl, theme.rawRgb, theme.darkGlowHsl);
+    return;
+  }
+
+  getAverageImageColor(imgEl).then(rgb => {
+    const theme = ensureVibrantForDarkBg(rgb.r, rgb.g, rgb.b);
+    applyDynamicTheme(theme.textHsl, theme.bgHsl, theme.rawRgb, theme.darkGlowHsl);
+  });
+}
+
+function getAverageImageColor(img) {
+  return new Promise((resolve) => {
+    if (!img) return resolve({ r: 69, g: 200, b: 245 });
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    const compute = () => {
+      try {
+        canvas.width = 30;
+        canvas.height = 30;
+        ctx.drawImage(img, 0, 0, 30, 30);
+        const data = ctx.getImageData(0, 0, 30, 30).data;
+        let r = 0, g = 0, b = 0, count = 0;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const brightness = (data[i] + data[i + 1] + data[i + 2]) / 3;
+          if (brightness > 15 && brightness < 245) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+            count++;
+          }
+        }
+
+        if (count === 0) return resolve({ r: 69, g: 200, b: 245 });
+        resolve({
+          r: Math.round(r / count),
+          g: Math.round(g / count),
+          b: Math.round(b / count)
+        });
+      } catch (e) {
+        resolve({ r: 69, g: 200, b: 245 });
+      }
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      compute();
+    } else {
+      img.onload = compute;
+      img.onerror = () => resolve({ r: 69, g: 200, b: 245 });
+    }
+  });
+}
+
+function ensureVibrantForDarkBg(r, g, b) {
+  const origR = r, origG = g, origB = b;
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h = 0, s = 0, l = (max + min) / 2;
+
+  if (max !== min) {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+
+  const vibrantS = Math.max(s, 75);
+  const vibrantL = Math.min(Math.max(Math.round(l * 100), 65), 78);
+
+  // Rich atmospheric background tint for dark mode (5.0% lightness)
+  const bgL = 5.0;
+  const bgS = Math.min(vibrantS, 32);
+
+  const darkGlowHsl = `hsl(${h}, ${vibrantS}%, 28%)`;
+
+  return {
+    textHsl: `hsl(${h}, ${vibrantS}%, ${vibrantL}%)`,
+    darkGlowHsl: darkGlowHsl,
+    bgHsl: `hsl(${h}, ${bgS}%, ${bgL}%)`,
+    rawRgb: { r: origR, g: origG, b: origB }
+  };
+}
+
+function applyDynamicTheme(textHsl, bgHsl, rawRgb, darkGlowHsl) {
+  currentActiveTextHsl = textHsl;
+  currentActiveBgHsl = bgHsl;
+  if (darkGlowHsl) currentActiveDarkGlowHsl = darkGlowHsl;
+  if (rawRgb) currentActiveRawRgb = rawRgb;
+
+  if (!isHeroSectionVisible) {
+    return;
+  }
+
+  document.documentElement.style.setProperty('--accent-primary', textHsl);
+  document.documentElement.style.setProperty('--dynamic-accent', textHsl);
+
+  // Update Custom Magnetic Cursor Ring & Dot to match current theme!
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  if (cursorDot) {
+    cursorDot.style.backgroundColor = textHsl;
+    cursorDot.style.boxShadow = `0 0 10px ${textHsl}`;
+  }
+  if (cursorRing) {
+    cursorRing.style.borderColor = textHsl;
+  }
+
+  if (window.updateAuraBlobsColor && rawRgb) {
+    window.updateAuraBlobsColor(rawRgb.r, rawRgb.g, rawRgb.b);
+  }
+
+  const glowColor = darkGlowHsl || textHsl;
+  const glowRgb = rawRgb ? `${rawRgb.r}, ${rawRgb.g}, ${rawRgb.b}` : '69, 200, 245';
+
+  const designerSpans = document.querySelectorAll('#kineticTitle .font-sans-bold, #kineticTitle .font-sans-bold .char-span, #kineticTitle .font-sans-bold .char-hover');
+  designerSpans.forEach(el => {
+    el.style.color = textHsl;
+    el.style.textShadow = `0 4px 16px rgba(0, 0, 0, 0.9), 0 0 25px ${glowColor}`;
+  });
+
+  const serifSpans = document.querySelectorAll('#kineticTitle .font-serif-italic, #kineticTitle .font-serif-italic .char-hover');
+  serifSpans.forEach(el => {
+    el.style.color = '#ffffff';
+    el.style.textShadow = '0 4px 20px rgba(0, 0, 0, 0.9)';
+  });
+
+  const asterisks = document.querySelectorAll('.hero__asterisk');
+  asterisks.forEach(el => {
+    el.style.color = textHsl;
+    el.style.textShadow = `0 0 16px ${glowColor}`;
+  });
+
+  const heroTags = document.querySelectorAll('.hero-tag');
+  heroTags.forEach(tag => {
+    tag.style.borderColor = textHsl;
+  });
+
+  const ctaLinks = document.querySelectorAll('.coverflow-cta');
+  ctaLinks.forEach(el => {
+    el.style.color = textHsl;
+  });
+
+  const allDots = document.querySelectorAll('.coverflow-dot');
+  allDots.forEach(el => {
+    if (el.classList.contains('is-active')) {
+      el.style.backgroundColor = textHsl;
+      el.style.boxShadow = `0 0 14px ${textHsl}`;
+    } else {
+      el.style.backgroundColor = '';
+      el.style.boxShadow = '';
+    }
+  });
+
+  const centerCards = document.querySelectorAll('.coverflow-card.is-center');
+  centerCards.forEach(el => {
+    el.style.borderColor = textHsl;
+  });
+
+  const arrows = document.querySelectorAll('.coverflow-arrow');
+  arrows.forEach(arrow => {
+    arrow.style.setProperty('--dynamic-accent', textHsl);
+  });
+
+  const btnMagnetic = document.querySelectorAll('.btn-magnetic');
+  btnMagnetic.forEach(btn => {
+    btn.style.backgroundColor = textHsl;
+    btn.style.boxShadow = `0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px ${glowColor}`;
+  });
+
+  const liquidBgs = document.querySelectorAll('.btn-liquid-bg');
+  liquidBgs.forEach(bg => {
+    bg.style.background = textHsl;
+  });
+
+  const tgSvgs = document.querySelectorAll('.btn-neon-border .tg-svg, .header__tg-btn .icon-tg');
+  tgSvgs.forEach(svg => {
+    svg.style.color = textHsl;
+  });
+
+  const telegramPulseBtns = document.querySelectorAll('.btn-telegram-pulse');
+  telegramPulseBtns.forEach(btn => {
+    btn.style.borderColor = textHsl;
+    btn.style.color = textHsl;
+  });
+
+  const tgStatusDots = document.querySelectorAll('.tg-status-dot');
+  tgStatusDots.forEach(dot => {
+    dot.style.backgroundColor = textHsl;
+    dot.style.boxShadow = `0 0 10px ${textHsl}`;
+  });
+
+  // 8. Update Background Showcase Aura & Ambient Beams
+  const showcaseAura = document.getElementById('showcaseAura');
+  if (showcaseAura) {
+    showcaseAura.style.background = `radial-gradient(circle, rgba(${glowRgb}, 0.15) 0%, rgba(${glowRgb}, 0.04) 45%, transparent 75%)`;
+  }
+
+  const heroBeam1 = document.getElementById('heroBeam1');
+  if (heroBeam1) {
+    heroBeam1.style.background = `linear-gradient(135deg, rgba(${glowRgb}, 0.12) 0%, transparent 80%)`;
+  }
+
+  const heroBeam2 = document.getElementById('heroBeam2');
+  if (heroBeam2) {
+    heroBeam2.style.background = `radial-gradient(ellipse at center, rgba(${glowRgb}, 0.10) 0%, transparent 75%)`;
+  }
+
+  // 9. Static deep dark neutral background (#07090e) suitable for any color scheme
+  document.body.style.backgroundColor = '#07090e';
+}
+
+/* Helper to generate random vibrant color palettes for Teaser Card */
+function getRandomVibrantTheme() {
+  const h = Math.floor(Math.random() * 360);
+  const s = Math.floor(Math.random() * 20) + 80; // 80% - 100% saturation
+  const l = Math.floor(Math.random() * 15) + 68; // 68% - 83% lightness
+
+  const textHsl = `hsl(${h}, ${s}%, ${l}%)`;
+  const bgHsl = `hsl(${h}, 35%, 6%)`;
+  const rgb = hslToRgb(h / 360, s / 100, l / 100);
+
+  return { textHsl, bgHsl, rawRgb: rgb };
+}
+
+function hslToRgb(h, s, l) {
+  let r, g, b;
+  if (s === 0) {
+    r = g = b = l;
+  } else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+}
+

@@ -6,7 +6,7 @@ export const pervye = {
   year: 2026,
   filterCategory: 'posters',
   badgeText: '2026 / НАРУЖНАЯ РЕКЛАМА',
-  tagline: '2026 / БАННЕРЫ',
+  tagline: 'БАННЕРЫ',
   category: 'Наружная реклама & Брендинг / 2026',
   title: 'Движение Первых',
   subtitle: 'Серия крупноформатных баннеров 6×3м согласно брендбуку с авторским видением',

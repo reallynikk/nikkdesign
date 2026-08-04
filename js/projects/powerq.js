@@ -6,7 +6,7 @@ export const powerq = {
   year: 2025,
   filterCategory: 'branding',
   badgeText: '2025 / МЕРЧ',
-  tagline: 'ШКОЛА КУРАТОРОВ',
+  tagline: 'МЕРЧ',
   category: 'Брендинг & Мерч / 2025',
   title: 'ИГЭУ PowerQ',
   subtitle: 'Полный авторский бренд-пак и мерч-система на тему «Детство»: от концепта и дудлов до футболок, бейджей и полиграфии',

@@ -6,7 +6,7 @@ export const curators = {
   year: 2026,
   filterCategory: 'branding',
   badgeText: '2026 / МЕРЧ',
-  tagline: '2026',
+  tagline: 'МЕРЧ',
   category: 'Брендинг & Мерч/2026',
   title: 'Кураторы ИГЭУ',
   subtitle: 'Фирменная атрибутика и линейка мерча для студенческого объединения выпуска 2026',

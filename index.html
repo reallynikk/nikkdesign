@@ -4,31 +4,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Никита Иванов — Графический Дизайнер | Портфолио</title>
-  <meta name="description"
-    content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+  <title>Никита Иванов</title>
+  <meta name="description" content="Портфолио графического дизайнера. Брендинг, айдентика, мерч и визуализация.">
   <meta name="keywords"
     content="дизайнер, портфолио, графический дизайн, мерч, кураторы игэу, брендинг, айдентика, telegram">
 
   <!-- Open Graph & Social Media Sharing Meta Tags -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Никита Иванов — Графический Дизайнер | Портфолио">
-  <meta property="og:description"
-    content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+  <meta property="og:title" content="Никита Иванов">
+  <meta property="og:description" content="Портфолио графического дизайнера. Брендинг, айдентика, мерч и визуализация.">
   <meta property="og:image" content="images/AboutMe/photo.webp">
   <meta property="og:locale" content="ru_RU">
   <meta name="theme-color" content="#07090e">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Никита Иванов — Графический Дизайнер | Портфолио">
+  <meta name="twitter:title" content="Никита Иванов">
   <meta name="twitter:description"
-    content="Портфолио графического и digital-дизайнера. Брендинг, айдентика, упаковка, мерч и 3D-визуализации.">
+    content="Портфолио графического дизайнера. Брендинг, айдентика, мерч и визуализация.">
   <meta name="twitter:image" content="images/AboutMe/photo.webp">
 
   <!-- Font Pairing: Dela Gothic One & Playfair Display -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
 
   <!-- Styles -->
@@ -86,34 +84,27 @@
         <div class="hero__grid">
           <!-- Left Column: Title & Intro -->
           <div class="hero__intro">
-            <div class="hero__status-pill reveal">
-              <span class="pulse-dot"></span>
-              <span>Открыт к новым проектам & фрилансу</span>
-            </div>
-
             <!-- Kinetic Title (Serif + Sans Pairing) -->
-            <h1 class="hero__kinetic-title" id="kineticTitle">
+            <h1 class="hero__title hero__kinetic-title" id="kineticTitle">
               <span class="title-line title-line--1">
-                <span class="font-serif-italic char-hover">Графический</span>
+                <span class="font-serif-italic">Графический</span>
               </span>
               <span class="title-line title-line--2">
-                <span class="font-sans-bold char-hover highlight-color">ДИЗАЙНЕР</span>
-                <span class="hero__asterisk">✦</span>
+                <span class="font-sans-bold highlight-color">ДИЗАЙНЕР</span>
               </span>
             </h1>
 
             <p class="hero__description reveal">
-              Создаю выразительную визуальную идентичность, фирменный мерч, упаковку и эстетичный digital-дизайн.
-              Превращаю идеи в лаконичные визуальные решения.
+              Делаю дизайн, который выделяет бренд и работает на задачи бизнеса: от фирменного стиля
+              и мерча до сайтов и соцсетей.Помогаю превратить задумку в чистый, понятный и красивый
+              визуал.
             </p>
 
             <!-- Dynamic Category Pills -->
             <div class="hero__tags reveal">
               <span class="hero-tag">Мерч & Брендинг</span>
               <span class="hero-tag">Айдентика</span>
-              <span class="hero-tag">Упаковка</span>
-              <span class="hero-tag">3D & Моушн</span>
-              <span class="hero-tag">Постеры</span>
+              <span class="hero-tag">Реклама</span>
             </div>
 
             <!-- Action Buttons -->
@@ -146,8 +137,12 @@
           <!-- Right Column: Spatial 3D Coverflow Showcase Stage -->
           <div class="hero__showcase-wrap reveal">
             <div class="hero-showcase-aura" id="showcaseAura"></div>
+            <div class="hero-ambient-beam hero-ambient-beam--1" id="heroBeam1"></div>
+            <div class="hero-ambient-beam hero-ambient-beam--2" id="heroBeam2"></div>
+            <div class="hero-ambient-grid-lines"></div>
 
             <div class="coverflow-stage" id="coverflowStage">
+              <div class="coverflow-top-tagline" id="coverflowTopTagline">✦ МЕРЧ</div>
               <div class="coverflow-track" id="coverflowTrack">
                 <!-- Dynamically rendered from PROJECTS_DATA in JS -->
               </div>
@@ -185,36 +180,36 @@
     <div class="marquee-section">
       <div class="marquee-track">
         <div class="marquee-content">
-          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Брендинг</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Баннеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Афиши</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Постеры</span><span class="marquee-star">✦</span>
         </div>
         <div class="marquee-content" aria-hidden="true">
-          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Брендинг</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Баннеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Афиши</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Постеры</span><span class="marquee-star">✦</span>
         </div>
         <div class="marquee-content" aria-hidden="true">
-          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Брендинг</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Баннеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Афиши</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Постеры</span><span class="marquee-star">✦</span>
         </div>
         <div class="marquee-content" aria-hidden="true">
-          <span class="marquee-item">БРЕНДИНГ</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Мерч и Айдентика</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">УПАКОВКА</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Афиши и Постеры</span><span class="marquee-star">✦</span>
-          <span class="marquee-item">3D И МОУШН</span><span class="marquee-star">✦</span>
-          <span class="marquee-item font-serif-italic">Типографика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Брендинг</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Мерч</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Айдентика</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Баннеры</span><span class="marquee-star">✦</span>
+          <span class="marquee-item">Афиши</span><span class="marquee-star">✦</span>
+          <span class="marquee-item font-serif-italic">Постеры</span><span class="marquee-star">✦</span>
         </div>
       </div>
     </div>
@@ -346,7 +341,7 @@
     <!-- Interactive Software & Skills Grid -->
     <section class="skills section" id="skills">
       <div class="container">
-        <div class="section-tag reveal">✦ СТЕК И ИНСТРУМЕНТЫ</div>
+        <div class="section-tag reveal">✦ ИНСТРУМЕНТЫ</div>
         <h2 class="section-title reveal">Инструменты <span class="font-serif-italic highlight-color">творчества</span>
         </h2>
 
@@ -385,15 +380,6 @@
             </div>
             <h3 class="skill-name">After Effects</h3>
             <p class="skill-desc">Анимация типографики, шейповый моушн-дизайн и лоадеры.</p>
-          </div>
-
-          <div class="skill-card glass-card reveal" data-cursor="BLENDER">
-            <div class="skill-card__header">
-              <div class="skill-icon bl-icon">Bl</div>
-              <span class="skill-level">3D</span>
-            </div>
-            <h3 class="skill-name">Blender 3D</h3>
-            <p class="skill-desc">Моделирование объектов, текстурирование, абстрактный 3D-арт.</p>
           </div>
 
           <div class="skill-card glass-card reveal" data-cursor="INDESIGN">
