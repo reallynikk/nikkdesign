@@ -14,4 +14,5 @@ Cloudflare Worker: `nikkdesign`. `wrangler.jsonc` builds the app and serves `dis
 
 The original site remains in Git history. The old `css`, `js` and `images` folders are retained for reference, but are outside the deployed assets directory.
 
-Social preview: `public/assets/social-preview.png` (1200×630). Open Graph, Twitter metadata, canonical URL, robots and sitemap are included. Project detail pages are currently brief previews; complete case studies will be added later.
+Social preview: `public/assets/social-preview.png` (1199×630). Open Graph, Twitter metadata, canonical URL, robots and sitemap are included. Project detail pages are currently brief previews; complete case studies will be added later.
+
