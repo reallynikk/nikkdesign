@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createCrystal } from './CrystalScene';
-import { HoverText } from './CrystalExperience';
+import { HoverText } from './HoverText';
 import { PortraitPhoto } from './PortraitPhoto';
 import { useAboutEntrance } from './useAboutEntrance';
 import { AboutAward } from './AboutAward';

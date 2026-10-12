@@ -1,8 +1,0 @@
-.git
-.git/**
-*.ai
-*.psd
-*.zip
-*.rar
-node_modules
-.wrangler
