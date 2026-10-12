@@ -2,7 +2,10 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nikkdesign",
   "compatibility_date": "2026-07-28",
+  "build": {
+    "command": "npm run build"
+  },
   "assets": {
-    "directory": "."
+    "directory": "./dist/client"
   }
 }
