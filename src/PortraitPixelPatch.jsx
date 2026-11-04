@@ -2,7 +2,9 @@ import { useEffect, useRef } from 'react';
 
 // Replace one small opaque region only; never pixelate the alpha silhouette.
 export function PortraitPixelPatch({ active }) {
-  const ref = useRef(null);
+  const ref = useRef(null), activeRef = useRef(active), sync = useRef(() => {});
+  activeRef.current = active;
+  useEffect(() => { sync.current(); }, [active]);
   useEffect(() => {
     const canvas = ref.current, host = canvas.closest('.about-photo-frame');
     const ctx = canvas.getContext('2d', { alpha: true });
@@ -10,11 +12,11 @@ export function PortraitPixelPatch({ active }) {
     const image = new Image();
     const source = document.createElement('canvas'), low = document.createElement('canvas');
     let timer = 0, frame = 0, cancelled = false, alpha, w = 0, h = 0;
-    let patches = [];
-    const enabled = () => active && !document.hidden && !reduced.matches && !cancelled;
+    let patches = [], dirtyBounds = [];
+    const enabled = () => activeRef.current && !document.hidden && !reduced.matches && !cancelled;
     const clear = () => {
       clearTimeout(timer); cancelAnimationFrame(frame); timer = frame = 0;
-      patches = [];
+      patches = []; dirtyBounds = [];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       delete host.dataset.localPixels;
       host.dataset.localPixelCount = '0';
@@ -63,28 +65,39 @@ export function PortraitPixelPatch({ active }) {
       const now = performance.now();
       const finished = patches.filter(patch => now - patch.started >= 1000).length;
       patches = patches.filter(patch => now - patch.started < 1000);
-      // Clear the overlay once, then composite every live patch. Retiring one
-      // patch never clears the other patches or the permanently visible photo.
-      ctx.clearRect(0, 0, w, h); ctx.imageSmoothingEnabled = false;
-      patches.forEach(patch => {
-        const p = Math.max(0, (now - patch.started) / 1000);
-        const cells = [20, 14, 10, 6, 3, 1];
-        const cell = cells[Math.min(cells.length - 1, Math.floor(p * cells.length))];
-        low.width = Math.max(2, Math.ceil(patch.dw / cell));
-        low.height = Math.max(2, Math.ceil(patch.dh / cell));
-        const lowCtx = low.getContext('2d');
-        lowCtx.imageSmoothingEnabled = false;
-        lowCtx.drawImage(image, patch.sx, patch.sy, patch.pw, patch.ph, 0, 0, low.width, low.height);
-        ctx.drawImage(low, 0, 0, low.width, low.height, patch.dx, patch.dy, patch.dw, patch.dh);
-      });
+      let changed = finished > 0;
+      const cells = [20, 14, 10, 6, 3, 1];
+      for (const patch of patches) {
+        const level = Math.min(cells.length - 1, Math.floor((now - patch.started) / 1000 * cells.length));
+        if (patch.cell !== cells[level]) { patch.cell = cells[level]; changed = true; }
+      }
+      // The stepped pixels only change six times per patch. Keep the last frame
+      // between steps and clear only previously painted rectangles, including
+      // retired patches; redraw all overlaps together.
+      if (changed) {
+        for (const patch of dirtyBounds) ctx.clearRect(patch.dx - 1, patch.dy - 1, patch.dw + 2, patch.dh + 2);
+        ctx.imageSmoothingEnabled = false;
+        patches.forEach(patch => {
+          const cell = patch.cell;
+          low.width = Math.max(2, Math.ceil(patch.dw / cell));
+          low.height = Math.max(2, Math.ceil(patch.dh / cell));
+          const lowCtx = low.getContext('2d');
+          lowCtx.imageSmoothingEnabled = false;
+          lowCtx.drawImage(image, patch.sx, patch.sy, patch.pw, patch.ph, 0, 0, low.width, low.height);
+          ctx.drawImage(low, 0, 0, low.width, low.height, patch.dx, patch.dy, patch.dw, patch.dh);
+        });
+        dirtyBounds = patches.slice();
+      }
       host.dataset.localPixelCount = String(patches.length);
       if (!patches.length) delete host.dataset.localPixels;
       for (let i = 0; i < finished; i++) host.dispatchEvent(new CustomEvent('portrait-local-pixels-complete'));
       if (patches.length) frame = requestAnimationFrame(render);
     }
     const preference = () => { clear(); if (alpha) schedule(); };
-    const resize = new ResizeObserver(() => { clear(); if (alpha) schedule(); });
+    const resize = new ResizeObserver(() => { clear(); dimensions(); if (alpha) schedule(); });
     resize.observe(canvas);
+    sync.current = preference;
+    document.addEventListener('visibilitychange', preference);
     reduced.addEventListener('change', preference);
     host.addEventListener('portrait-pixels-hover-request', preference);
     image.onload = () => {
@@ -95,12 +108,14 @@ export function PortraitPixelPatch({ active }) {
       alpha = sourceCtx.getImageData(0, 0, source.width, source.height).data;
       dimensions(); schedule();
     };
-    image.src = '/assets/about-photo.png';
+    image.src = '/assets/about-photo.webp';
     return () => {
       cancelled = true; clear(); resize.disconnect();
+      sync.current = () => {};
+      document.removeEventListener('visibilitychange', preference);
       reduced.removeEventListener('change', preference);
       host.removeEventListener('portrait-pixels-hover-request', preference);
     };
-  }, [active]);
+  }, []);
   return <canvas ref={ref} className="about-portrait-patch" aria-hidden="true" />;
 }

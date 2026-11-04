@@ -14,5 +14,5 @@ Cloudflare Worker: `nikkdesign`. `wrangler.jsonc` builds the app and serves `dis
 
 The original site and retired prototypes remain recoverable in Git history. The repository contains only the current app and its required assets; obsolete folders, experimental scenes and unused media have been removed.
 
-Social preview: `public/assets/social-preview.png` (1199×630). Open Graph, Twitter metadata, canonical URL, robots and sitemap are included. Project detail pages are currently brief previews; complete case studies will be added later.
+Social preview: `public/assets/social-preview.png` (1199×630). Open Graph, Twitter metadata, canonical URL, robots and sitemap are included. The works section is marked as under active development; Telegram and VK contacts are available below it. Run `npm test` to check scene visibility and the interactive logo fracture.
 

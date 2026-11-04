@@ -1,0 +1,37 @@
+/* Mono Gallery: original artwork and motion on one quiet dark surface. */
+html { -webkit-text-size-adjust:100%; color-scheme:dark; }
+body { background:#101113; }
+.calm-page { color:#f1f1ed; background:#101113; }
+.calm-page .home-section,.calm-page .home-shade { background:#101113; }
+.calm-page .about-section { color:#f1f1ed; background:#101113; }
+.calm-page .about-role,.calm-page .about-facts,.calm-page .about-facts dd,.calm-page .about-next,.calm-page .about-award { color:#f1f1ed; }
+.calm-page .about-name h2 { font-size:clamp(28px,14.3cqw,88px); font-weight:550; letter-spacing:-.045em; word-spacing:.04em; text-align:center; text-align-last:auto; }
+.calm-page .about-role { font-weight:500; letter-spacing:-.035em; }
+.calm-page .about-facts dt { font-weight:550; letter-spacing:-.045em; }
+.calm-page .about-facts dd { font-size:clamp(16px,1.3vw,19px); letter-spacing:-.015em; }
+.calm-page .about-next { border-color:#ffffff30; font-weight:500; letter-spacing:-.025em; }
+.calm-page .about-award { border-color:#ffffff24; }
+.calm-page .about-award:focus-visible,.calm-page .about-next:focus-visible { outline-color:#f1f1ed; }
+.calm-page .about-frame-glow { box-shadow:0 12px 36px -22px #ffffff14; }
+.calm-page section.development-section,.calm-page .works-stage { background:#101113; color:#f1f1ed; }
+.calm-page .floating-work-window { box-shadow:0 20px 50px -18px #00000060; }
+.calm-page .development-tape { padding:7px 0; border-block-width:2px; background:#efd54b; box-shadow:0 5px 24px #00000025; }
+.calm-page .development-tape::before,.calm-page .development-tape::after { height:3px; background:repeating-linear-gradient(120deg,#141414 0 6px,#efd54b 6px 15px); }
+.calm-page .development-tape-copy > span { font-size:clamp(20px,1.8vw,28px); font-weight:650; letter-spacing:-.035em; }
+.calm-page .mono-host { cursor:default; }
+.mono-host--fallback canvas { visibility:hidden; }
+.mono-fallback { position:absolute; top:50%; left:50%; width:min(700px,56%); height:auto; transform:translate(-50%,-50%); }
+.detail-dialog { font-family:var(--font-body); }
+@media(hover:hover) and (pointer:fine) {
+  .calm-page .about-award:hover { border-color:#ffffff70; }
+}
+@media(max-width:700px) {
+  .calm-page .home-section { min-height:560px; }
+  .mono-fallback { width:76%; }
+  .calm-page .about-section { padding-top:64px; padding-bottom:calc(112px + env(safe-area-inset-bottom,0px)); }
+  .calm-page .about-facts dd { font-size:16px; }
+  .calm-page .development-section .works-surface { padding-bottom:calc(80px + env(safe-area-inset-bottom,0px)); }
+  .calm-page .development-tape { padding:9px 0; }
+}
+
+.mono-fallback { filter:invert(1); }

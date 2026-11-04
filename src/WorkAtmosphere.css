@@ -1,0 +1,54 @@
+.work-atmosphere { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.floating-work { position:absolute; width:clamp(150px,19vw,300px); aspect-ratio:1.4; pointer-events:none; }
+.floating-work-window { width:100%; height:100%; overflow:hidden; border-radius:7px; background:#fff; box-shadow:0 12px 35px -20px #14141455; }
+.floating-work img { display:block; width:100%; height:100%; object-fit:contain; animation:artwork-breathe 7s var(--ease-in-out) infinite alternate; animation-play-state:paused; }
+.is-running .floating-work img { animation-play-state:running; }
+.floating-work:nth-child(even) img { animation-delay:-3.5s; animation-direction:alternate-reverse; }
+@keyframes artwork-breathe { from { transform:scale(1.02) translateY(-1%); } to { transform:scale(1.12) translateY(1%); } }
+
+/* The artwork remains at 50% opacity behind the opaque moving tape. */
+.work-atmosphere--pulse .floating-work { width:clamp(200px,28vw,440px); opacity:.5; animation:artwork-pulse 11s var(--ease-in-out) infinite; animation-play-state:paused; }
+.work-atmosphere--pulse.is-running .floating-work { animation-play-state:running; }
+.work-atmosphere--pulse .floating-work--0 { left:7%; top:12%; --tilt:-12deg; animation-delay:-1s; }
+.work-atmosphere--pulse .floating-work--1 { left:57%; top:8%; --tilt:10deg; animation-delay:-6s; }
+.work-atmosphere--pulse .floating-work--2 { left:34%; top:31%; --tilt:-5deg; animation-delay:-9s; }
+.work-atmosphere--pulse .floating-work--3 { left:4%; top:62%; --tilt:8deg; animation-delay:-4s; }
+.work-atmosphere--pulse .floating-work--4 { left:64%; top:59%; --tilt:-9deg; animation-delay:-8s; }
+.work-atmosphere--pulse .floating-work--5 { left:36%; top:70%; --tilt:6deg; animation-delay:-2s; }
+@keyframes artwork-pulse {
+  0%,100% { opacity:0; transform:rotate(var(--tilt)) scale(.28); }
+  20% { opacity:.5; }
+  50% { opacity:.5; transform:rotate(calc(var(--tilt) * -1)) scale(1.08); }
+  80% { opacity:.5; }
+}
+
+.development-tape { position:absolute; top:50%; left:-5%; width:110%; transform:translateY(-50%) rotate(-7deg); z-index:3; overflow:hidden; padding:14px 0; border-block:10px solid #141414; background:#ffdc2e; color:#141414; box-shadow:0 8px 28px #14141418; }
+.development-tape::before,.development-tape::after { content:""; position:absolute; inset:0 0 auto; height:5px; background:repeating-linear-gradient(120deg,#141414 0 12px,#ffdc2e 12px 24px); }
+.development-tape::after { top:auto; bottom:0; }
+.development-tape-track { display:flex; width:max-content; animation:tape-travel 34s linear infinite; animation-play-state:paused; }
+.works-stage.is-running .development-tape-track { animation-play-state:running; }
+.development-tape-copy { display:flex; flex-shrink:0; }
+.development-tape-copy > span { display:flex; align-items:center; gap:36px; padding:0 20px; font-size:clamp(24px,3.4vw,52px); font-weight:600; letter-spacing:-.045em; white-space:nowrap; line-height:1.25; }
+.development-tape-copy i { font-style:normal; font-size:1.2em; }
+@keyframes tape-travel { to { transform:translateX(-50%); } }
+
+@media(max-width:700px) {
+  .floating-work { width:170px; }
+  .work-atmosphere--pulse .floating-work { width:52vw; }
+  .work-atmosphere--pulse .floating-work--1 { left:48%; top:18%; }
+  .work-atmosphere--pulse .floating-work--2 { left:24%; top:36%; }
+  .work-atmosphere--pulse .floating-work--4 { left:49%; top:65%; }
+  .work-atmosphere--pulse .floating-work--5 { left:20%; top:77%; }
+  .development-tape { padding:16px 0; border-block-width:7px; transform:translateY(-50%) rotate(-10deg); }
+  .development-tape-copy > span { gap:24px; padding-inline:14px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .floating-work img,.work-atmosphere--pulse .floating-work,.development-tape-track { animation:none; }
+  .work-atmosphere--pulse .floating-work { opacity:.5; transform:rotate(var(--tilt)) scale(.8); }
+}
+
+.process-notes{position:absolute;inset:0;pointer-events:none}
+.process-note{position:absolute;width:clamp(220px,24vw,360px);min-height:100px;color:#b4b5b9;font:400 clamp(14px,1.3vw,19px)/1.6 ui-monospace,Consolas,monospace;overflow-wrap:anywhere;opacity:.7}
+.process-type-caret{display:inline-block;width:6px;height:1em;margin-left:4px;background:#aeb0b5;vertical-align:-.1em}
+@media(max-width:700px){.process-note{width:43%;font-size:12px;line-height:1.5;min-height:90px}}
+@media(prefers-reduced-motion:reduce){.process-type-caret{display:none}}

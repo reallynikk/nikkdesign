@@ -1,18 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { CrystalExperience } from './DoorExperience';
 import { PixelImage } from './PixelImage';
 import { TechnicalCursor } from './TechnicalCursor';
 
-const telegram = 'https://t.me/reallynikk';
+const Portfolio = memo(CrystalExperience);
 
 export function App() {
-  const dialog = useRef(null);
   const [ready, setReady] = useState(false);
   const sceneReady = useCallback(() => {
-    document.fonts.load('700 100px Golos').catch(() => {}).then(() => setReady(true));
+    Promise.all([
+      document.fonts.load('400 48px "Manrope"', 'Никита Иванов'),
+      document.fonts.load('500 18px "Manrope"', 'Мои работы'),
+    ]).catch(() => {}).then(() => setReady(true));
   }, []);
   const [entered, setEntered] = useState(false);
-  const [panel, setPanel] = useState(null);
   const [visualProgress, setVisualProgress] = useState(0);
   const readyRef = useRef(false);
   readyRef.current = ready;
@@ -58,19 +59,6 @@ export function App() {
     return () => clearTimeout(id);
   }, [ready, visualProgress]);
 
-  useEffect(() => {
-    if (panel) {
-      dialog.current?.showModal();
-      document.body.style.overflow = 'hidden';
-    } else {
-      dialog.current?.close();
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [panel]);
-
   return (
     <>
       <TechnicalCursor />
@@ -96,51 +84,9 @@ export function App() {
         </div>
       </div>
 
-      <CrystalExperience entered={entered} setPanel={setPanel} onReady={sceneReady} />
-
-      <dialog
-        ref={dialog}
-        className="detail-dialog"
-        onCancel={() => setPanel(null)}
-        onClick={e => {
-          if (e.target === dialog.current) setPanel(null);
-        }}
-      >
-        <div className="dialog-inner">
-          <button className="close" onClick={() => setPanel(null)}>
-            Закрыть <span aria-hidden="true">×</span>
-          </button>
-
-          {panel === 'about' && (
-            <>
-              <span className="eyebrow">ОБО МНЕ</span>
-              <h2>Никита Иванов</h2>
-              <p>
-                Графический дизайнер.<br />
-                Превращаю идеи в выразительную визуальную систему.
-              </p>
-              <a className="project-link" href={telegram} target="_blank" rel="noreferrer">
-                Обсудить проект ↗
-              </a>
-            </>
-          )}
-
-          {panel === 'contact' && (
-            <>
-              <span className="eyebrow">КОНТАКТЫ</span>
-              <h2>
-                Давайте сделаем<br />
-                что-то вместе.
-              </h2>
-              <a className="project-link" href={telegram} target="_blank" rel="noreferrer">
-                Написать в Телеграм ↗
-              </a>
-            </>
-          )}
+      <Portfolio entered={entered} onReady={sceneReady} />
 
 
-        </div>
-      </dialog>
     </>
   );
 }

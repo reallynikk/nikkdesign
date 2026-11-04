@@ -1,8 +1,8 @@
 @font-face {
-    font-family: Golos;
-    src: url('/assets/golos.ttf') format('truetype');
-    font-weight: 100 900;
-    font-display: swap
+    font-family: 'Manrope';
+    src: url('/assets/fonts/manrope-variable.ttf') format('truetype');
+    font-weight: 200 800;
+    font-display: swap;
 }
 
 .experience { height: 340svh; position: relative; }
@@ -73,11 +73,14 @@
 @media (prefers-reduced-motion: reduce) { .projects-section { transform: none; } }
 
 :root {
-    font-family: Golos, Arial, sans-serif;
+    --font-body: 'Manrope', Arial, sans-serif;
+    --font-display: 'Manrope', Arial, sans-serif;
+    font-family: var(--font-body);
     color: #080808;
     background: #f9f7f4;
     font-synthesis: none;
-    -webkit-font-smoothing: antialiased
+    -webkit-font-smoothing: antialiased;
+    font-optical-sizing: auto;
 }
 
 * {

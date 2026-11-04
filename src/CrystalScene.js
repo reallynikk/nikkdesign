@@ -2,8 +2,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createFracture } from './CrystalFracture';
 import { phase, smooth } from './JourneyMotion';
+import { createPortfolioGalaxy } from './PortfolioGalaxy';
 
-export function createCrystal(host, getProgress, onReady, onError) {
+export function createCrystal(host, getProgress, onReady, onError, { miniature = false } = {}) {
   let renderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' }); }
   catch (error) { onError(error); return () => { }; }
@@ -11,12 +12,13 @@ export function createCrystal(host, getProgress, onReady, onError) {
   renderer.transmissionResolutionScale = .5;
   renderer.setClearColor(0xffffff, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = .85;
+  renderer.toneMappingExposure = miniature ? 1.2 : .65;
   host.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
+  const galaxy = miniature ? null : createPortfolioGalaxy(wake);
   const camera = new THREE.PerspectiveCamera(34, 1, .05, 120);
   const studio = new THREE.Scene();
-  studio.background = new THREE.Color('#25252c');
+  studio.background = new THREE.Color('#11131b');
   // Broad studio lights and narrow spectral strips reflected in each bevel.
   const cards = [];
   function lightCard(color, intensity, size, position) {
@@ -24,13 +26,13 @@ export function createCrystal(host, getProgress, onReady, onError) {
     mesh.material.color.multiplyScalar(intensity);
     mesh.position.set(...position); mesh.lookAt(0, 0, 0); studio.add(mesh); cards.push(mesh);
   }
-  lightCard('#ffffff', 6, [5, 8], [-5, 3, 4]);
-  lightCard('#ffffff', 4, [3, 7], [5, 0, 2]);
-  lightCard('#fff4db', 5, [8, 2], [0, 6, -2]);
-  lightCard('#ffffff', 3, [7, 1], [0, -4, 4]);
+  lightCard('#dde5ff', 3.8, [3, 8], [-5, 3, 4]);
+  lightCard('#ffffff', 2.6, [2, 7], [5, 0, 2]);
+  lightCard('#eee3d6', 3, [8, 1.5], [0, 6, -2]);
+  lightCard('#afb5cf', 1.5, [7, 1], [0, -4, 4]);
   ['#ff7948', '#ffe5a0', '#7fffee', '#43bfff', '#8b6cff', '#ff9bd9'].forEach((color, i) => {
-    lightCard(color, 4, [.32, 8], [-3 + i * .42, 0, -4]);
-    lightCard(color, 3, [.24, 6], [1.8 + i * .4, 1, 4]);
+    lightCard(color, miniature ? .6 : 2.5, [.32, 8], [-3 + i * .42, 0, -4]);
+    lightCard(color, miniature ? .5 : 2, [.24, 6], [1.8 + i * .4, 1, 4]);
   });
   const pmrem = new THREE.PMREMGenerator(renderer);
   const environment = pmrem.fromScene(studio, .025, .1, 50);
@@ -47,10 +49,10 @@ export function createCrystal(host, getProgress, onReady, onError) {
   film.wrapS = film.wrapT = THREE.RepeatWrapping;
   film.magFilter = film.minFilter = THREE.LinearFilter; film.needsUpdate = true;
   const material = new THREE.MeshPhysicalMaterial({
-    color: '#cfdef4', metalness: .62, roughness: .035,
-    transmission: .22, thickness: .5, ior: 1.8, dispersion: 1,
-    iridescence: 1, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 750], iridescenceThicknessMap: film,
-    clearcoat: 1, clearcoatRoughness: .025, envMapIntensity: .9,
+    color: miniature ? '#dce2ec' : '#78839c', metalness: miniature ? .6 : .82, roughness: miniature ? .16 : .11,
+    transmission: .14, thickness: .8, ior: 1.8, dispersion: miniature ? .15 : .55,
+    iridescence: miniature ? .18 : .65, iridescenceIOR: 1.8, iridescenceThicknessRange: [180, 750], iridescenceThicknessMap: film,
+    clearcoat: .7, clearcoatRoughness: .06, envMapIntensity: miniature ? 1.15 : .7,
   });
   // Fine spectral reflections make the bevels readable on a white backdrop.
   material.onBeforeCompile = shader => {
@@ -63,7 +65,7 @@ export function createCrystal(host, getProgress, onReady, onError) {
         vec3 spectralCrystal = 0.5 + 0.5 * cos(prismPhase + vec3(0.0, 2.1, 4.2));
         float prismBand = pow(0.5 + 0.5 * sin(prismPhase * 2.7), 12.0);
         float prismGlint = pow(0.5 + 0.5 * sin(prismPhase * 2.7 + 0.45), 60.0);
-        outgoingLight = outgoingLight * (0.48 + 0.52 * prismBand) + spectralCrystal * prismBand * 1.1 + vec3(prismGlint * 1.8);
+        outgoingLight = mix(outgoingLight, outgoingLight * (0.6 + 0.4 * prismBand) + spectralCrystal * prismBand * 0.5 + vec3(prismGlint * 0.65), ${miniature ? '0.12' : '1.0'});
         #include <opaque_fragment>
       `);
   };
@@ -95,17 +97,20 @@ export function createCrystal(host, getProgress, onReady, onError) {
     root.traverse(o => { if (o.isMesh) { o.geometry.dispose(); for (const m of (Array.isArray(o.material) ? o.material : [o.material])) materials.add(m); } });
     for (const m of materials) if (m !== material) m.dispose();
   }
-  scene.add(new THREE.HemisphereLight('#ffffff', '#6484c0', .6));
-  const key = new THREE.DirectionalLight('#ffffff', 1); key.position.set(3, 5, 5); scene.add(key);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#a4aec4', miniature ? 1.8 : .6));
+  const key = new THREE.DirectionalLight('#ffffff', miniature ? 3 : 1); key.position.set(3, 5, 5); scene.add(key);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let frame = 0, last = performance.now(), auto = 0, dragging = false, px = 0, py = 0;
   let rx = -.13, ry = -.23, targetX = rx, targetY = ry, vx = 0, vy = 0;
   let visible = true, disposed = false;
+  let transitionQuality = false;
   const resize = () => {
     const width = host.clientWidth, height = host.clientHeight;
     if (!width || !height) return;
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.35, Math.sqrt(2400000 / (width * height))));
+    renderer.setPixelRatio(Math.min(devicePixelRatio, transitionQuality ? .8 : 1.35,
+      Math.sqrt((transitionQuality ? 900000 : 2400000) / (width * height))));
     renderer.setSize(width, height); camera.aspect = width / height;
+    galaxy?.resize(width, height);
     camera.position.z = camera.aspect < 1 ? 7 / camera.aspect : 7.8;
     camera.updateProjectionMatrix();
     wake();
@@ -133,6 +138,11 @@ export function createCrystal(host, getProgress, onReady, onError) {
   };
   const leave = () => { pointerInside = false; fracture?.hover(null); };
   const keydown = e => {
+    if (miniature && ['Enter', ' '].includes(e.key)) {
+      e.preventDefault();
+      if (!reduced.matches) fracture?.burst(new THREE.Vector3());
+      wake(); return;
+    }
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(e.key)) return;
     e.preventDefault();
     if (e.key === 'Home') { targetX = -.13; targetY = -.23; auto = 0; }
@@ -150,12 +160,24 @@ export function createCrystal(host, getProgress, onReady, onError) {
   const aboutSection = host.closest('main')?.querySelector('#about');
   const visibility = () => {
     // Home is sticky: intersection alone cannot detect the opaque About overlay.
-    visible = !document.hidden && host.getBoundingClientRect().bottom > 0 && (!aboutSection || aboutSection.getBoundingClientRect().top > 0);
+    const aboutTop = aboutSection?.getBoundingClientRect().top ?? innerHeight;
+    const rect = miniature ? host.getBoundingClientRect() : null;
+    visible = !document.hidden && (miniature ? rect.bottom > 0 && rect.top < innerHeight : aboutTop > 0);
+    host.dataset.sceneVisible = String(visible);
+    // The blur hides fine detail; reserve GPU capacity for native scrolling.
+    const nextQuality = !miniature && aboutTop < innerHeight - 8;
+    if (nextQuality !== transitionQuality) {
+      transitionQuality = nextQuality;
+      renderer.transmissionResolutionScale = transitionQuality ? .25 : .5;
+      if (visible) resize();
+    }
     if (!visible) { cancelAnimationFrame(frame); frame = 0; pointerInside = false; fracture?.hover(null); }
     else wake();
   };
+  const visibilityObserver = miniature ? new IntersectionObserver(visibility) : null;
+  visibilityObserver?.observe(host);
   document.addEventListener('visibilitychange', visibility);
-  window.addEventListener('scroll', visibility, { passive: true });
+  if (!miniature) window.addEventListener('scroll', visibility, { passive: true });
   reduced.addEventListener('change', wake);
   function render(now) {
     frame = 0;
@@ -194,7 +216,14 @@ export function createCrystal(host, getProgress, onReady, onError) {
     crystal.position.x += shake;
     crystal.position.y += shake * .5;
     crystal.rotation.z += shake * .35;
+    // Render the screen-space galaxy underneath the original interactive emblem.
+    renderer.autoClear = false;
+    renderer.clear();
+    galaxy?.render(renderer, dt, reduced.matches, pointerInside && fine.matches && !dragging && !cachedHover ? pointer : null,
+      reduced.matches || !host.closest('main').inert);
+    renderer.clearDepth();
     renderer.render(scene, camera);
+    renderer.autoClear = true;
   }
   new GLTFLoader().load('/assets/crystal-emblem.glb', gltf => {
     if (disposed) { disposeModel(gltf.scene); return; }
@@ -212,8 +241,9 @@ export function createCrystal(host, getProgress, onReady, onError) {
     catch (error) { onError(error); }
   }, undefined, error => { if (!disposed) onError(error); });
   return () => {
-    disposed = true; cancelAnimationFrame(frame); observer.disconnect();
+    disposed = true; cancelAnimationFrame(frame); observer.disconnect(); visibilityObserver?.disconnect();
     fracture?.dispose();
+    galaxy?.dispose();
     host.removeEventListener('pointerleave', leave); host.removeEventListener('lostpointercapture', leave);
     host.removeEventListener('pointerdown', down); host.removeEventListener('pointermove', move);
     host.removeEventListener('pointerup', up); host.removeEventListener('pointercancel', up); host.removeEventListener('keydown', keydown);

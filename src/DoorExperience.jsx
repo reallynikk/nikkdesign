@@ -1,53 +1,83 @@
 import { useEffect, useRef, useState } from 'react';
-import { createCrystal } from './CrystalScene';
-import { HoverText } from './HoverText';
+import { createArtcraftScene } from './ArtcraftScene';
+import { GlassNavigation } from './GlassNavigation';
+import { ButtonIcon } from './ButtonIcon';
 import { PortraitPhoto } from './PortraitPhoto';
 import { useAboutEntrance } from './useAboutEntrance';
-import { AboutAward } from './AboutAward';
+import { AboutLogo } from './AboutLogo';
+import { WorkAtmosphere, DevelopmentTape } from './WorkAtmosphere';
 
 import './Journey.css';
+import './PortfolioTheme.css';
+import './ArtcraftHome.css';
 
-const groups = [
-  { name: 'Движение Первых', type: 'Айдентика · Полиграфия · Предметный дизайн', image: '/assets/preview-4.png', number: '01' },
-  { name: 'Кураторы ИГЭУ', type: 'Айдентика · Графический дизайн', number: '02' },
-  { name: 'Другие проекты', type: 'Графика · Эксперименты', number: '03' },
-];
-
-export function CrystalExperience({ entered, setPanel, onReady }) {
-  const track = useRef(null), host = useRef(null), about = useRef(null), projects = useRef(null), dialog = useRef(null);
-  const [failed, setFailed] = useState(false), [activeProject, setActiveProject] = useState(null);
+export function CrystalExperience({ entered, onReady }) {
+  const track = useRef(null), host = useRef(null), about = useRef(null), projects = useRef(null);
+  const [failed, setFailed] = useState(false);
+  const contacts = useRef(null), contactHost = useRef(null);
+  useEffect(() => {
+    let dispose;
+    const observer = new IntersectionObserver(entries => {
+      if (dispose || !entries.some(entry => entry.isIntersecting)) return;
+      dispose = createArtcraftScene(contactHost.current, () => {}, () => {});
+      observer.disconnect();
+    }, { rootMargin: '200px' });
+    observer.observe(contactHost.current);
+    return () => { observer.disconnect(); dispose?.(); };
+  }, []);
+  const [section, setSection] = useState('home');
   useAboutEntrance(about, entered);
 
   // Normal document scrolling carries the emblem out of view with Home.
-  useEffect(() => createCrystal(host.current, () => 0, onReady, () => {
+  useEffect(() => createArtcraftScene(host.current, onReady, () => {
     setFailed(true);
     onReady();
-  }), [onReady]);
+  }, { cover: about.current }), [onReady]);
 
   useEffect(() => {
     const root = track.current;
     const home = root.querySelector('.home-section');
     const surface = root.querySelector('.home-surface');
     const shade = root.querySelector('.home-shade');
-    const header = root.querySelector('.page-header');
-    const navigation = header.querySelector('nav');
+    const worksSurface = projects.current.querySelector('.works-surface');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const contactContent = contacts.current.querySelector('.contact-content');
+    const setStyle = (node, property, value) => { if (node.style[property] !== value) node.style[property] = value; };
     let frame = 0;
     const update = () => {
       frame = 0;
-      const aboutTop = about.current.getBoundingClientRect().top;
-      // Mobile navigation occupies a second row outside the header's own box.
-      const headerBottom = Math.ceil(Math.max(header.getBoundingClientRect().bottom,
-        navigation.getBoundingClientRect().bottom) + 18);
-      header.style.setProperty('--header-background-height', `${headerBottom}px`);
-      // Let the real dark edge fill both header rows during native scrolling.
-      // Only replace it with the identical fixed backing once it reaches y=0.
-      header.classList.toggle('has-dark-background', aboutTop <= 0);
+      const aboutRect = about.current.getBoundingClientRect();
+      const contactTop = contacts.current.getBoundingClientRect().top;
+      const homeHeight = home.clientHeight;
+      const aboutTop = aboutRect.top;
+      const aboutBottom = aboutRect.bottom;
+      setSection(contactTop <= innerHeight * .5 ? 'contact' : aboutBottom <= innerHeight * .5 ? 'works' : aboutTop <= innerHeight * .5 ? 'about' : 'home');
       const progress = reduced.matches ? 0 : Math.max(0, Math.min(1,
-        1 - aboutTop / home.clientHeight));
-      surface.style.transform = reduced.matches ? 'none' : `scale(${1 - progress * 0.04})`;
-      shade.style.opacity = String(progress * 0.32);
-      home.inert = progress >= 1;
+        1 - aboutTop / homeHeight));
+      const depth = progress * progress * (3 - 2 * progress);
+      const compact = innerWidth <= 700;
+      setStyle(surface, 'transform', reduced.matches ? 'none' : `scale(${1 - depth * (compact ? .04 : .09)})`);
+      setStyle(surface, 'filter', 'none');
+      setStyle(surface, 'clipPath', reduced.matches ? 'none' : `inset(0 round ${depth * 42}px)`);
+      setStyle(surface, 'opacity', String(reduced.matches ? 1 : 1 - depth * .35));
+      const entry = Math.max(0, Math.min(1, 1 - aboutTop / innerHeight));
+      setStyle(about.current, 'clipPath', reduced.matches ? 'none' : `inset(0 round ${(1 - entry) * 48}px ${(1 - entry) * 48}px 0 0)`);
+      // About slides UP to uncover Works: the reverse of covering Home.
+      // Native scroll retraces the same composition in either direction.
+      const viewport = innerHeight;
+      const clamp = value => Math.max(0, Math.min(1, value));
+      const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
+      const handoff = clamp(1 - aboutRect.bottom / viewport);
+      const reveal = smooth(handoff);
+      setStyle(worksSurface, 'transform', reduced.matches ? 'none' : `scale(${.92 + reveal * .08})`);
+      setStyle(worksSurface, 'clipPath', reduced.matches ? 'none' : `inset(${(1 - reveal) * 3}% round ${(1 - reveal) * 48}px)`);
+      const contactEntry = smooth(1 - contactTop / viewport);
+      setStyle(contacts.current, 'clipPath', reduced.matches ? 'none' : `inset(${(1 - contactEntry) * 6}% ${(1 - contactEntry) * 5}% 0 round ${(1 - contactEntry) * 64}px)`);
+      setStyle(contactContent, 'transform', reduced.matches ? 'none' : `translate3d(0,${(1 - contactEntry) * 60}px,0)`);
+      setStyle(contactContent, 'opacity', String(reduced.matches ? 1 : .45 + contactEntry * .55));
+      setStyle(shade, 'opacity', String(progress * 0.32));
+      const homeCovered = aboutTop <= 0;
+      if (home.inert !== homeCovered) home.inert = homeCovered;
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
     addEventListener('scroll', schedule, { passive: true });
@@ -109,37 +139,30 @@ export function CrystalExperience({ entered, setPanel, onReady }) {
     };
   }, [entered]);
 
-  useEffect(() => {
-    if (activeProject) dialog.current.showModal();
-    else dialog.current.close();
-  }, [activeProject]);
-
   function navigate(destination, event) {
-    const target = destination === 'home' ? track.current : destination === 'works' ? projects.current : about.current;
+    const target = destination === 'home' ? track.current : destination === 'works' ? projects.current : destination === 'contact' ? contacts.current : about.current;
     const instant = event?.detail === 0 || matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (destination === 'about' && instant) about.current.dispatchEvent(new CustomEvent('about-reveal-instant'));
-    target.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'start' });
+    if (destination === 'works') {
+      const overlap = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : innerHeight;
+      scrollTo({ top: scrollY + target.getBoundingClientRect().top + overlap, behavior: instant ? 'instant' : 'smooth' });
+    } else target.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'start' });
     target.focus({ preventScroll: true });
   }
 
-  return <main ref={track} id="home" tabIndex={-1} className="experience calm-page" inert={!entered}>
-      <header className="header page-header">
-        <a className="brand" href="#home" aria-label="nikk — на главную" onClick={event => { event.preventDefault(); navigate('home', event); }}><img src="/assets/logo.svg" alt="nikk" /></a>
-        <nav aria-label="Основная навигация">
-          <button onClick={event => navigate('about', event)}><HoverText>Обо мне</HoverText></button>
-          <button onClick={event => navigate('works', event)}><HoverText>Мои работы</HoverText></button>
-          <button onClick={() => setPanel('contact')}><HoverText>Контакты</HoverText></button>
-        </nav>
-        <a className="telegram" href="https://t.me/reallynikk" target="_blank" rel="noreferrer"><HoverText>Телеграм ↗</HoverText></a>
-      </header>
+  return <main ref={track} id="home" tabIndex={-1} className="experience calm-page artcraft-page" data-section={section} inert={!entered}>
+      <GlassNavigation active={section} navigate={navigate} onContact={event => navigate('contact', event)} />
     <section className="experience-stage home-section" aria-label="Главная">
       <div className="home-surface">
-      <div ref={host} className="crystal-host" data-cursor="drag" role="group" tabIndex={0} aria-label="Стеклянный знак. Наведите для локального распада, нажмите для разлома. Тяните для вращения или используйте стрелки.">{failed && <div className="crystal-fallback">nikk</div>}</div>
-      <h1 className="sr-only">Никита Иванов — графический дизайнер</h1>
-      <footer className="footer">
-        <div className="identity"><strong>НИКИТА ИВАНОВ</strong><span>графический дизайнер</span><small>/// сделано в 2026</small></div>
-        <div className="identity home-instruction"><strong>КАСАЙТЕСЬ. РАЗБИРАЙТЕ.</strong><span>Листайте — познакомимся ↓</span><small>/// наведите или нажмите на модель</small></div>
-      </footer>
+      <div ref={host} className={`crystal-host mono-host${failed ? ' mono-host--fallback' : ''}`} role="img" aria-label="nikk — логотип и работы Никиты Иванова">{failed && <img className="mono-fallback" src="/assets/logo.svg" alt="" />}</div>
+      <div className="artcraft-hero-content">
+        <div className="artcraft-hero-stack">
+          <div className="artcraft-hero-scrim" aria-hidden="true" />
+          <div className="artcraft-wordmark"><img src="/assets/logo.svg" alt="nikk — Никита Иванов" /></div>
+          <h1>Графический дизайнер</h1>
+          <div className="artcraft-hero-actions"><button className="artcraft-cta artcraft-cta-primary" onClick={event => navigate('works', event)}><ButtonIcon name="layout-grid" />Смотреть работы</button><a className="artcraft-cta artcraft-cta-secondary" href="https://t.me/reallynikk" target="_blank" rel="noreferrer"><ButtonIcon name="message-circle" />Обсудить проект</a></div>
+        </div>
+      </div>
       </div>
       <div className="home-shade" aria-hidden="true" />
     </section>
@@ -148,7 +171,7 @@ export function CrystalExperience({ entered, setPanel, onReady }) {
       <div className="about-name" data-about-reveal>
         <h2 id="about-title" className="about-depth">Никита Иванов</h2>
       </div>
-      <div className="about-role" data-about-reveal><p className="about-depth">Графический{' '}<br />дизайнер</p><AboutAward onOpen={() => setActiveProject(groups[0])} /></div>
+      <div className="about-role" data-about-reveal><p className="about-depth">Графический{' '}<br />дизайнер</p><AboutLogo /></div>
       <figure className="about-photo">
         <PortraitPhoto />
       </figure>
@@ -157,22 +180,32 @@ export function CrystalExperience({ entered, setPanel, onReady }) {
         <dl className="about-fact" data-about-reveal><div className="about-depth"><dt>3+</dt><dd>больших проекта</dd></div></dl>
       </div>
 
-      <div className="about-next-wrap" data-about-reveal><button className="about-next about-depth" onClick={event => navigate('works', event)}>Смотреть работы <span aria-hidden="true">↗</span></button></div>
+      <div className="about-next-wrap" data-about-reveal><button className="artcraft-cta about-depth about-works-glass" onClick={event => navigate('works', event)}><ButtonIcon name="layout-grid" />Смотреть работы</button></div>
     </section>
 
-    <section id="works" ref={projects} tabIndex={-1} className="projects-section is-visible" aria-label="Мои работы">
-      <div data-reveal>
-        <div className="projects-heading"><span>ИЗБРАННЫЕ РАБОТЫ / 2026</span><span>03 ПРОЕКТА</span></div>
-        <h2>Мои работы<span aria-hidden="true">↙</span></h2>
+    <section id="works" ref={projects} tabIndex={-1} className="projects-section development-section is-visible" aria-label="Раздел в активной разработке">
+      <div className="works-stage">
+        <div className="works-surface">
+          <WorkAtmosphere entered={entered} />
+          <DevelopmentTape />
+        </div>
       </div>
-      <div className="project-triptych">{groups.map(group => <button className="project-card" data-reveal key={group.number} onClick={() => setActiveProject(group)}>
-        <div className={`project-cover project-cover--${group.number}`}>{group.image ? <img src={group.image} alt="" /> : <div className="curators-cover"><span>{group.number === '02' ? 'ИГЭУ' : 'ГРАФИКА / ОБЪЕКТЫ'}</span><strong>{group.number === '02' ? 'КУРАТОРЫ' : 'ЭКСПЕРИМЕНТЫ'}</strong></div>}<span className="project-number">/{group.number}</span><span className="project-arrow" aria-hidden="true">↗</span></div><h3>{group.name}</h3><p>{group.type}</p>
-      </button>)}</div>
-      <div className="projects-bottom"><span>Визуальные решения с характером.</span><button onClick={event => navigate('about', event)}>Обо мне ↑</button></div>
     </section>
-    <dialog ref={dialog} className="detail-dialog" aria-labelledby="project-title" onCancel={() => setActiveProject(null)} onClick={event => { if (event.target === dialog.current) setActiveProject(null); }}><div className="dialog-inner"><button className="close" onClick={() => setActiveProject(null)}>Закрыть ×</button><span className="eyebrow">{activeProject?.type}</span><h2 id="project-title">{activeProject?.name}</h2>{activeProject?.image && <img className="detail-award" src={activeProject.image} alt={activeProject.name} />}<p>Полный кейс появится позже.</p></div></dialog>
+    <section id="contact" ref={contacts} tabIndex={-1} className="contact-section" aria-labelledby="contact-title">
+      <div ref={contactHost} className="contact-galaxy" aria-hidden="true" />
+      <div className="contact-content">
+        <h2 id="contact-title"><span className="contact-title-line"><ButtonIcon name="message-circle" />Есть идея?</span><br /><span>Давайте обсудим.</span></h2>
+        <a className="contact-link" href="https://t.me/reallynikk" target="_blank" rel="noreferrer">
+          <span className="contact-link-copy"><span className="contact-link-label">Написать в Телеграм</span><span className="contact-handle">@reallynikk</span></span>
+          <span className="contact-link-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a className="contact-link" href="https://vk.ru/reallynikk" target="_blank" rel="noreferrer">
+          <span className="contact-link-copy"><span className="contact-link-label">Написать во ВКонтакте</span><span className="contact-handle">@reallynikk</span></span>
+          <span className="contact-link-arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+    <footer className="site-footer"><span>Никита Иванов</span><a href="https://reallynikk.ru/">reallynikk.ru</a><span>© 2026</span></footer>
+
   </main>;
 }
-
-
-
