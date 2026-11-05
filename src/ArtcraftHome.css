@@ -74,3 +74,57 @@
 
 
 .about-works-glass{width:100%}
+
+/* A single, bounded reading column on phones; keep the desktop composition. */
+@media(max-width:700px){
+  .calm-page .about-section{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:repeat(5,auto);
+    justify-items:center;
+    gap:22px;
+    min-height:0;
+    padding:44px 24px calc(112px + env(safe-area-inset-bottom,0px));
+  }
+  .about-section>:is(.about-name,.about-role,.about-photo,.about-facts,.about-next-wrap){
+    grid-column:1;
+    width:100%;
+    max-width:340px;
+    min-width:0;
+    margin:0;
+  }
+  .about-section .about-name{grid-row:1;padding:0;container-type:normal}
+  .calm-page .about-name h2{
+    font-size:clamp(28px,8.7vw,40px);
+    line-height:1.12;
+    white-space:normal;
+    text-align:left;
+    text-align-last:auto;
+    letter-spacing:-.045em;
+  }
+  .about-section .about-role{
+    grid-row:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    font-size:18px;
+    line-height:1.35;
+    text-align:left;
+  }
+  .about-role>p{min-width:0;max-width:220px}
+  .about-section .about-logo-wrap{flex:0 0 72px;width:72px;margin:0}
+  .about-section .about-photo{grid-row:3;max-width:320px;margin-block:8px 0}
+  .about-section .about-facts{grid-row:4;gap:20px;align-items:start}
+  .about-section .about-facts dt{font-size:28px;line-height:1.15}
+  .about-section .about-facts dd{font-size:15px;line-height:1.4;overflow-wrap:break-word}
+  .about-section .about-next-wrap{grid-row:5}
+  .about-section .about-works-glass{height:52px;font-size:14px;white-space:normal}
+}
+@media(max-width:359px){
+  .calm-page .about-section{padding-inline:20px;gap:20px}
+  .about-section .about-role{font-size:17px;gap:10px}
+  .about-section .about-logo-wrap{flex-basis:60px;width:60px}
+  .about-section .about-facts{gap:16px}
+  .about-section .about-facts dt{font-size:26px}
+  .about-section .about-facts dd{font-size:14px}
+}

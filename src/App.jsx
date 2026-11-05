@@ -1,92 +1,65 @@
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { CrystalExperience } from './DoorExperience';
-import { PixelImage } from './PixelImage';
+import { preparePortfolioMedia } from './portfolioMedia';
 import { TechnicalCursor } from './TechnicalCursor';
 
 const Portfolio = memo(CrystalExperience);
 
 export function App() {
-  const [ready, setReady] = useState(false);
-  const sceneReady = useCallback(() => {
-    Promise.all([
-      document.fonts.load('400 48px "Manrope"', 'Никита Иванов'),
-      document.fonts.load('500 18px "Manrope"', 'Мои работы'),
-    ]).catch(() => {}).then(() => setReady(true));
-  }, []);
   const [entered, setEntered] = useState(false);
-  const [visualProgress, setVisualProgress] = useState(0);
-  const readyRef = useRef(false);
-  readyRef.current = ready;
-
-  useEffect(() => {
-    let frame;
-    let current = 0;
-    const startTime = performance.now();
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    function step(now) {
-      if (reduced) {
-        setVisualProgress(100);
-        return;
-      }
-      const elapsed = now - startTime;
-      const naturalProgress = Math.min(92, elapsed / 16);
-      const target = readyRef.current ? 100 : naturalProgress;
-
-      const diff = target - current;
-      if (diff > 0.04) {
-        current += Math.max(0.35, diff * 0.11);
-        if (current > target) current = target;
-      } else if (readyRef.current) {
-        current = 100;
-      }
-      current = Math.min(100, Math.max(0, current));
-      setVisualProgress(current);
-
-      if (current < 100 || !readyRef.current) {
-        frame = requestAnimationFrame(step);
-      }
-    }
-    frame = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(frame);
+  const [progress, setProgress] = useState(0);
+  const [error, setError] = useState(false);
+  const [complete, setComplete] = useState(false);
+  const stages = useRef(new Set());
+  const mediaProgress = useRef(0);
+  const sceneReady = useCallback(stage => {
+    stages.current.add(stage);
+    const done = mediaProgress.current === 1 && stages.current.size === 3;
+    setProgress(done ? 100 : Math.min(99, Math.round(mediaProgress.current * 85 + stages.current.size * 5)));
+    if (done) setComplete(true);
   }, []);
 
   useEffect(() => {
-    if (!ready || visualProgress < 99.5) return;
-    const id = setTimeout(() => {
-      setEntered(true);
-    }, 400);
-    return () => clearTimeout(id);
-  }, [ready, visualProgress]);
+    let cancelled = false;
+    preparePortfolioMedia(value => {
+      if (cancelled) return;
+      mediaProgress.current = value;
+      const done = value === 1 && stages.current.size === 3;
+      setProgress(done ? 100 : Math.min(99, Math.round(value * 85 + stages.current.size * 5)));
+      if (done) setComplete(true);
+    }).catch(() => { if (!cancelled) setError(true); });
+    return () => { cancelled = true; };
+  }, []);
 
-  return (
-    <>
-      <TechnicalCursor />
-      <div className={`loader ${entered ? 'loader--done' : ''}`} aria-hidden={entered}>
-        <div className="loader-centre">
-          <PixelImage
-            src="/assets/logo-white.svg"
-            className="loader-logo"
-            alt="nikk"
-            progress={visualProgress}
-            duration={1200}
-          />
-          <div
-            className="loader-track"
-            role="progressbar"
-            aria-label="Загрузка работ"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={Math.round(visualProgress)}
-          >
-            <span style={{ transform: `scaleX(${visualProgress / 100})` }} />
-          </div>
+  useEffect(() => {
+    if (!complete) return;
+    // Paint the completed progress transition before revealing the prepared page.
+    const timer = setTimeout(() => setEntered(true), matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300);
+    return () => clearTimeout(timer);
+  }, [complete]);
+
+  useEffect(() => {
+    if (entered) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = previous; };
+  }, [entered]);
+
+  return <>
+    <TechnicalCursor />
+    <div className={`loader ${entered ? 'loader--done' : ''}`} aria-hidden={entered}>
+      <div className="loader-centre">
+        <img src="/assets/logo-white.svg" className="loader-logo" alt="nikk" />
+        <div className="loader-track" role="progressbar" aria-label="Загрузка сайта"
+          aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}>
+          <span style={{ transform: `scaleX(${progress / 100})` }} />
         </div>
+        {error && <div className="loader-error" role="alert">
+          <p>Не удалось загрузить материалы сайта. Проверьте соединение.</p>
+          <button onClick={() => location.reload()}>Попробовать снова</button>
+        </div>}
       </div>
-
-      <Portfolio entered={entered} onReady={sceneReady} />
-
-
-    </>
-  );
+    </div>
+    <Portfolio entered={entered} onReady={sceneReady} />
+  </>;
 }

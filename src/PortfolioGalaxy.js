@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const images = ['preview-0.png', 'card-front.jpg', 'preview-2.png', 'sticker-one.jpg', 'preview-4.png', 'bag-front.jpg', 'preview-1.png', 'sticker-two.jpg', 'preview-3.png', 'stickers-front.jpg', 'award.png', 'card-back.jpg'];
+const images = ['preview-0.webp', 'card-front.jpg', 'preview-2.webp', 'sticker-one.jpg', 'preview-4.webp', 'bag-front.jpg', 'preview-1.webp', 'sticker-two.jpg', 'preview-3.webp', 'stickers-front.jpg', 'preview-4.webp', 'card-back.jpg'];
 const tau = Math.PI * 2;
 const clamp = x => Math.max(0, Math.min(1, x));
 const smooth = x => { const t = clamp(x); return t * t * (3 - 2 * t); };

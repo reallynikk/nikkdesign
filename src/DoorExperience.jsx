@@ -16,23 +16,16 @@ export function CrystalExperience({ entered, onReady }) {
   const [failed, setFailed] = useState(false);
   const contacts = useRef(null), contactHost = useRef(null);
   useEffect(() => {
-    let dispose;
-    const observer = new IntersectionObserver(entries => {
-      if (dispose || !entries.some(entry => entry.isIntersecting)) return;
-      dispose = createArtcraftScene(contactHost.current, () => {}, () => {});
-      observer.disconnect();
-    }, { rootMargin: '200px' });
-    observer.observe(contactHost.current);
-    return () => { observer.disconnect(); dispose?.(); };
-  }, []);
+    return createArtcraftScene(contactHost.current, () => onReady('contact'), () => onReady('contact'), { includeVideos: true });
+  }, [onReady]);
   const [section, setSection] = useState('home');
   useAboutEntrance(about, entered);
 
   // Normal document scrolling carries the emblem out of view with Home.
-  useEffect(() => createArtcraftScene(host.current, onReady, () => {
+  useEffect(() => createArtcraftScene(host.current, () => onReady('home'), () => {
     setFailed(true);
-    onReady();
-  }, { cover: about.current }), [onReady]);
+    onReady('home');
+  }, { cover: about.current, includeVideos: true }), [onReady]);
 
   useEffect(() => {
     const root = track.current;
@@ -171,7 +164,7 @@ export function CrystalExperience({ entered, onReady }) {
       <div className="about-name" data-about-reveal>
         <h2 id="about-title" className="about-depth">Никита Иванов</h2>
       </div>
-      <div className="about-role" data-about-reveal><p className="about-depth">Графический{' '}<br />дизайнер</p><AboutLogo /></div>
+      <div className="about-role" data-about-reveal><p className="about-depth">Графический{' '}<br />дизайнер</p><AboutLogo onReady={onReady} /></div>
       <figure className="about-photo">
         <PortraitPhoto />
       </figure>

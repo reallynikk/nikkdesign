@@ -161,7 +161,7 @@ a:focus-visible,
     z-index: 100;
     display: grid;
     place-items: center;
-    transition: opacity 500ms ease, visibility 500ms;
+    transition: opacity 500ms var(--ease-out), visibility 0s linear 500ms;
     pointer-events: all
 }
 
@@ -173,7 +173,20 @@ a:focus-visible,
 
 .loader-logo {
     width: 240px;
-    height: 110px
+    height: 110px;
+    object-fit: contain;
+    animation: loader-breathe 1800ms ease-in-out infinite;
+}
+
+@keyframes loader-breathe { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+.loader--done .loader-logo { animation-play-state:paused }
+.loader-error { max-width:320px; text-align:center; font-size:14px; line-height:1.5 }
+.loader-error button { padding:10px 16px; border:1px solid #ffffff60; border-radius:24px; background:transparent; color:#fff; cursor:pointer }
+.experience { transition:opacity 500ms var(--ease-out) }
+.experience[inert] { opacity:0 }
+@media(prefers-reduced-motion:reduce) {
+  .loader-logo { animation:none }
+  .loader,.experience { transition:opacity 150ms linear }
 }
 
 .stage {
@@ -769,7 +782,7 @@ p {
     height: 100%;
     background: #f9f7f4;
     transform-origin: left;
-    transition: transform 80ms linear;
+    transition: transform 250ms linear;
     will-change: transform
 }
 

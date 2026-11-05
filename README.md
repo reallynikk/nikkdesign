@@ -1,18 +1,24 @@
 # Сайт Никиты Иванова
 
-Portfolio of graphic designer Nikita Ivanov, https://reallynikk.ru/.
+Портфолио графического дизайнера: https://reallynikk.ru/.
 
-React, Vite and Three.js. Node.js 22 or later.
+React, Vite и Three.js. Node.js 22 или новее.
 
 ```sh
 npm ci
 npm run dev
 npm run build
+npm test
 ```
 
-Cloudflare Worker: `nikkdesign`. `wrangler.jsonc` builds the app and serves `dist/client` as static assets. Deploy with `npx wrangler deploy`, or use the existing Cloudflare Git integration. Build command for Git integration: `npm ci && npm run build`; deploy command: `npx wrangler deploy`.
+Публикация настроена через GitHub и Cloudflare: изменения в main репозитория reallynikk/nikkdesign запускают сборку Worker nikkdesign. Команда сборки — npm ci && npm run build, публикации — npx wrangler deploy. Статические файлы находятся в dist/client; конфигурация — wrangler.jsonc.
 
-The original site and retired prototypes remain recoverable in Git history. The repository contains only the current app and its required assets; obsolete folders, experimental scenes and unused media have been removed.
+Главная и контакты показывают по одной карточке на работу: 12 изображений и 3 видео без дублирования в спирали. Разделы используют общие проигрыватели и не загружают видео повторно. Неактивная сцена освобождает только собственный запрос воспроизведения. Видео останавливаются, когда их не показывает ни одна сцена, при скрытии вкладки и включении уменьшенного движения.
 
-Social preview: `public/assets/social-preview.png` (1199×630). Open Graph, Twitter metadata, canonical URL, robots and sitemap are included. The works section is marked as under active development; Telegram and VK contacts are available below it. Run `npm test` to check scene visibility and the interactive logo fracture.
+Сжатые ролики весят вместе 1 092 137 байт. Исходные макеты и оригиналы медиа в репозиторий публикации не входят. Передняя и задняя стороны футболки кураторов ИГЭУ объединены в одну карточку curators-shirts.svg.
 
+Загрузочный экран ждёт загрузки видео, декодирования изображений, шрифтов и подготовки графических сцен. При ошибке показывает повторную попытку. Мобильный раздел «Обо мне» использует одну колонку с компактным логотипом, неподвижным портретом и отступом под нижнюю навигацию.
+
+Описание ссылки: «Графический дизайнер. Мои работы и контакты.». Превью — public/assets/social-preview-home.jpg (1199×630): главный экран без меню и кнопок. Каноническая ссылка, Open Graph, Twitter, robots и sitemap включены.
+
+Тесты проверяют видимость сцен, разлом 3D-логотипа, готовность медиа и совместное воспроизведение между разделами.
