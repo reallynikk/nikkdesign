@@ -94,7 +94,7 @@ export function createArtcraftScene(host, onReady, onError, { cover = null, incl
     for(let i=0;i<segments;i++)for(const angle of [i/segments*TAU,i/segments*TAU+Math.PI/segments])circle.push(outer*.56*Math.cos(angle),outer*.56*Math.sin(angle),-2);
     for(const [vertices,material] of [[ticks,tickMaterial],[circle,lineMaterial]]){const geom=new THREE.BufferGeometry();geom.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));guides.add(new THREE.LineSegments(geom,material));}
     for(let i=0;i<count;i++){
-      const material=new THREE.ShaderMaterial({vertexShader:cardVertex,fragmentShader:cardFragment,transparent:true,depthTest:false,depthWrite:false,
+      const material=new THREE.ShaderMaterial({vertexShader:cardVertex,fragmentShader:cardFragment,defines:{CARD_VIDEO:textures[i%textures.length].isVideoTexture?1:0},transparent:true,depthTest:false,depthWrite:false,
         uniforms:{uMap:{value:textures[i%textures.length]},uRepeat:{value:new THREE.Vector2(1,1)},uOffset:{value:new THREE.Vector2()},uBg:{value:new THREE.Vector3(18/255,19/255,22/255)},uBlur:{value:0},uTexA:{value:1},uAlpha:{value:0},uAber:{value:.019},uCurve:{value:32},uSize:{value:new THREE.Vector2(160,90)},uMouse:{value:new THREE.Vector2()},uWarp:{value:0},uClick:{value:Array.from({length:4},()=>new THREE.Vector4())},uClickW:{value:20},uRadius:{value:10},uFrameCol:{value:new THREE.Vector3(.45,.45,.45)},uFrameA:{value:.22}}
       });
       const mesh=new THREE.Mesh(plane,material);mesh.frustumCulled=false;scene.add(mesh);
